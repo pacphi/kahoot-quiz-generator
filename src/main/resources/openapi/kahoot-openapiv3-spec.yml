@@ -1,0 +1,1387 @@
+---
+openapi: 3.0.3
+info:
+  title: Kahoot Data API
+  description: Making Learning Awesome!
+  version: 0.1.0
+paths:
+  /v1/organisations/{organisationId}:
+    get:
+      tags:
+      - Organisation Resource
+      summary: Get organisation info
+      description: Get details about the organisation.
+      parameters:
+      - name: organisationId
+        in: path
+        required: true
+        schema:
+          $ref: '#/components/schemas/UUID'
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Organisation'
+        "401":
+          description: Not Authorized
+        "403":
+          description: Not Allowed
+      security:
+      - ClientCredentials: []
+  /v1/organisations/{organisationId}/games:
+    get:
+      tags:
+      - Game Session Resource
+      parameters:
+      - name: organisationId
+        in: path
+        required: true
+        schema:
+          $ref: '#/components/schemas/UUID'
+      - name: cursor
+        in: query
+        schema:
+          description: Cursor to start querying from
+          type: string
+      - name: limit
+        in: query
+        schema:
+          format: int32
+          description: Maximum number of items to return
+          default: 100
+          maximum: 100
+          minimum: 1
+          type: integer
+      - name: startedSince
+        in: query
+        schema:
+          $ref: '#/components/schemas/Instant'
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PagedResponseGameSession'
+        "401":
+          description: Not Authorized
+        "403":
+          description: Not Allowed
+      security:
+      - ClientCredentials: []
+  /v1/organisations/{organisationId}/games/{gameSessionId}:
+    get:
+      tags:
+      - Game Session Resource
+      parameters:
+      - name: gameSessionId
+        in: path
+        required: true
+        schema:
+          $ref: '#/components/schemas/UUID'
+      - name: organisationId
+        in: path
+        required: true
+        schema:
+          $ref: '#/components/schemas/UUID'
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GameSession'
+        "401":
+          description: Not Authorized
+        "403":
+          description: Not Allowed
+      security:
+      - ClientCredentials: []
+  /v1/organisations/{organisationId}/games/{gameSessionId}/blocks/{blockIndex}/answers:
+    get:
+      tags:
+      - Answer Resource
+      parameters:
+      - name: blockIndex
+        in: path
+        required: true
+        schema:
+          format: int32
+          type: integer
+      - name: gameSessionId
+        in: path
+        required: true
+        schema:
+          $ref: '#/components/schemas/UUID'
+      - name: organisationId
+        in: path
+        required: true
+        schema:
+          $ref: '#/components/schemas/UUID'
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AnsweredQuestion'
+        "401":
+          description: Not Authorized
+        "403":
+          description: Not Allowed
+      security:
+      - ClientCredentials: []
+  /v1/organisations/{organisationId}/games/{gameSessionId}/participants:
+    get:
+      tags:
+      - Participants Resource
+      parameters:
+      - name: gameSessionId
+        in: path
+        required: true
+        schema:
+          $ref: '#/components/schemas/UUID'
+      - name: organisationId
+        in: path
+        required: true
+        schema:
+          $ref: '#/components/schemas/UUID'
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PagedResponseGameParticipant'
+        "401":
+          description: Not Authorized
+        "403":
+          description: Not Allowed
+      security:
+      - ClientCredentials: []
+  /v1/organisations/{organisationId}/kahoots/{kahootId}:
+    get:
+      tags:
+      - Kahoot Resource
+      parameters:
+      - name: kahootId
+        in: path
+        required: true
+        schema:
+          $ref: '#/components/schemas/UUID'
+      - name: organisationId
+        in: path
+        required: true
+        schema:
+          $ref: '#/components/schemas/UUID'
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Kahoot'
+        "401":
+          description: Not Authorized
+        "403":
+          description: Not Allowed
+      security:
+      - ClientCredentials: []
+  /v1/organisations/{organisationId}/kahoots/{kahootId}/versions:
+    get:
+      tags:
+      - Kahoot Resource
+      parameters:
+      - name: kahootId
+        in: path
+        required: true
+        schema:
+          $ref: '#/components/schemas/UUID'
+      - name: organisationId
+        in: path
+        required: true
+        schema:
+          $ref: '#/components/schemas/UUID'
+      - name: cursor
+        in: query
+        schema:
+          description: Cursor to start querying from
+          type: string
+      - name: limit
+        in: query
+        schema:
+          format: int32
+          description: Maximum number of items to return
+          default: 100
+          maximum: 100
+          minimum: 1
+          type: integer
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PagedResponseKahootVersion'
+        "401":
+          description: Not Authorized
+        "403":
+          description: Not Allowed
+      security:
+      - ClientCredentials: []
+  /v1/organisations/{organisationId}/kahoots/{kahootId}/versions/{version}:
+    get:
+      tags:
+      - Kahoot Resource
+      parameters:
+      - name: kahootId
+        in: path
+        required: true
+        schema:
+          $ref: '#/components/schemas/UUID'
+      - name: organisationId
+        in: path
+        required: true
+        schema:
+          $ref: '#/components/schemas/UUID'
+      - name: version
+        in: path
+        required: true
+        schema:
+          format: int32
+          type: integer
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Kahoot'
+        "401":
+          description: Not Authorized
+        "403":
+          description: Not Allowed
+      security:
+      - ClientCredentials: []
+  /v1/organisations/{organisationId}/users:
+    get:
+      tags:
+      - User Resource
+      summary: Get information about all users in an organisation
+      parameters:
+      - name: organisationId
+        in: path
+        required: true
+        schema:
+          $ref: '#/components/schemas/UUID'
+      - name: cursor
+        in: query
+        schema:
+          description: Cursor to start querying from
+          type: string
+      - name: limit
+        in: query
+        schema:
+          format: int32
+          description: Maximum number of items to return
+          default: 100
+          maximum: 100
+          minimum: 1
+          type: integer
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PagedResponseUser'
+        "401":
+          description: Not Authorized
+        "403":
+          description: Not Allowed
+      security:
+      - ClientCredentials: []
+  /v1/organisations/{organisationId}/users/{userId}:
+    get:
+      tags:
+      - User Resource
+      summary: Get information about a user
+      parameters:
+      - name: organisationId
+        in: path
+        required: true
+        schema:
+          $ref: '#/components/schemas/UUID'
+      - name: userId
+        in: path
+        required: true
+        schema:
+          $ref: '#/components/schemas/UUID'
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        "401":
+          description: Not Authorized
+        "403":
+          description: Not Allowed
+      security:
+      - ClientCredentials: []
+components:
+  schemas:
+    Answer:
+      description: Represents a single player's answer to given question or content
+      type: object
+      properties:
+        type:
+          description: The type of a block this answer refers to
+          type: string
+          allOf:
+          - $ref: '#/components/schemas/KahootBlockType'
+      discriminator:
+        propertyName: type
+        mapping:
+          SINGLE_SELECT_QUIZ: '#/components/schemas/SingleSelectQuizAnswer'
+          MULTI_SELECT_QUIZ: '#/components/schemas/MultiSelectQuizAnswer'
+          TRUE_FALSE: '#/components/schemas/TrueFalseAnswer'
+          WORD_CLOUD: '#/components/schemas/WordCloudAnswer'
+          BRAINSTORMING: '#/components/schemas/BrainstormingBlock'
+          OPEN_ENDED: '#/components/schemas/OpenEndedAnswer'
+          PUZZLE: '#/components/schemas/PuzzleAnswer'
+          SINGLE_SELECT_POLL: '#/components/schemas/SingleSelectPollAnswer'
+          MULTI_SELECT_POLL: '#/components/schemas/MultiSelectPollAnswer'
+          TYPE_ANSWER: '#/components/schemas/TypeAnswerResponse'
+          SLIDER: '#/components/schemas/SliderAnswer'
+          DROP_PIN: '#/components/schemas/DropPinAnswer'
+    AnswerCorrectness:
+      description: |2+
+          Represents answer correctness. Legal values:
+
+          CORRECT - the answer is fully correct
+
+          ALMOST_CORRECT - (applies to SliderBlock only) the answer is close to the correct one (within SliderBlock.tolerance property)
+
+          PARTIALLY_CORRECT - (applies to MultiSelectQuiz only) some but not all correct answer options are selected
+
+          WRONG - Wrong answer
+
+      enum:
+      - CORRECT
+      - ALMOST_CORRECT
+      - PARTIALLY_CORRECT
+      - WRONG
+      type: string
+    AnswerStatus:
+      description: Provides the information whether the participant managed to answer
+        the question
+      enum:
+      - RECEIVED
+      - TIMEOUT
+      type: string
+    AnsweredQuestion:
+      description: Contains information about given question in the gameplay
+      type: object
+      properties:
+        blockIndexInKahoot:
+          format: int32
+          description: Index at which this block originally appeared in the associated
+            kahoot (0 based)
+          type: integer
+        blockIndexInGame:
+          format: int32
+          description: |-
+            Index at which this block appeared during the game session (0 based).
+
+            Can be different than blockIndexInKahoot in case of random order of questions was used.
+          type: integer
+        answers:
+          description: Set of answers submitted for this question
+          uniqueItems: true
+          type: array
+          items:
+            $ref: '#/components/schemas/ParticipantAnswer'
+    BrainstormingAnswer:
+      description: Represents a single answer to 'brainstorming' block
+      type: object
+      properties:
+        points:
+          format: int32
+          description: The number of points the player got for this question
+          type: integer
+        type:
+          description: The type of a block this answer refers to
+          type: string
+          allOf:
+          - $ref: '#/components/schemas/KahootBlockType'
+        ideas:
+          type: array
+          items:
+            $ref: '#/components/schemas/BrainstormingIdea'
+    BrainstormingBlock:
+      type: object
+      properties:
+        contentType:
+          description: Value that indicates the type of block
+          type: string
+          allOf:
+          - $ref: '#/components/schemas/KahootBlockType'
+        blockIndex:
+          format: int32
+          description: Index of this block within the containing kahoot (zero-based)
+          type: integer
+        hasMedia:
+          description: Flag that indicates whether this block has media attached to
+            it
+          type: boolean
+        question:
+          description: The text to be displayed for this question
+          type: string
+    BrainstormingIdea:
+      description: Represents a single brainstorming idea suggested by a player
+      type: object
+      properties:
+        text:
+          description: |
+            The text typed-in by the player as displayed on the screen.
+            Can be normalized to match answers with different case or punctuation.
+            Might have profanity removed from it.
+          type: string
+        originalText:
+          description: The text exactly as it was typed-in by the player
+          type: string
+        points:
+          format: int32
+          description: The number of points the player got for this question
+          type: integer
+        votes:
+          format: int32
+          description: The number of votes this idea received
+          type: integer
+        ideasGroupId:
+          description: Identifies the groupId of this idea. Null if it was considered
+            unique.
+          type: string
+          nullable: true
+    ContentBlock:
+      type: object
+      properties:
+        contentType:
+          description: Value that indicates the type of block
+          type: string
+          allOf:
+          - $ref: '#/components/schemas/KahootBlockType'
+        blockIndex:
+          format: int32
+          description: Index of this block within the containing kahoot (zero-based)
+          type: integer
+        hasMedia:
+          description: Flag that indicates whether this block has media attached to
+            it
+          type: boolean
+        title:
+          description: Title of the content
+          type: string
+        description:
+          description: Description of the content
+          type: string
+    DropPinAnswer:
+      description: Represents a single player's answer to a 'drop-pin' block
+      type: object
+      properties:
+        type:
+          description: The type of a block this answer refers to
+          type: string
+          allOf:
+          - $ref: '#/components/schemas/KahootBlockType'
+        x:
+          format: double
+          description: X coordinate of the point selected by the player
+          type: number
+        "y":
+          format: double
+          description: Y coordinate of the point selected by the player
+          type: number
+    DropPinBlock:
+      type: object
+      properties:
+        contentType:
+          description: Value that indicates the type of block
+          type: string
+          allOf:
+          - $ref: '#/components/schemas/KahootBlockType'
+        blockIndex:
+          format: int32
+          description: Index of this block within the containing kahoot (zero-based)
+          type: integer
+        hasMedia:
+          description: Flag that indicates whether this block has media attached to
+            it
+          type: boolean
+        question:
+          description: The text to be displayed for this question
+          type: string
+    GameParticipant:
+      type: object
+      properties:
+        participantId:
+          format: int32
+          description: |
+            Unique technical id within the game of the participant.
+
+            Makes it possible to track this participant within one single game session.
+          type: integer
+        nickname:
+          description: The nickname used by the participant in the game
+          type: string
+        userId:
+          description: |
+            The user id of this player, if available.
+
+            Makes it possible to track this participant across multiple games using "Player Identifier" feature.
+          type: string
+          allOf:
+          - $ref: '#/components/schemas/UUID'
+          nullable: true
+        playerIdentifier:
+          description: |
+            The player identifier for this participant, if available and the game is using the "Player Identifier" feature.
+          type: string
+          nullable: true
+    GameSession:
+      type: object
+      properties:
+        gameSessionId:
+          description: Id used to identify a unique game instance
+          type: string
+          allOf:
+          - $ref: '#/components/schemas/UUID'
+        hostUserId:
+          description: Id of the user who hosted / started the game
+          type: string
+          allOf:
+          - $ref: '#/components/schemas/UUID'
+        organisationId:
+          description: The id of the organisation in which this game was played
+          type: string
+          allOf:
+          - $ref: '#/components/schemas/UUID'
+        kahootIdentifier:
+          description: Unique identification of the kahoot version played as part
+            of this game
+          type: object
+          allOf:
+          - $ref: '#/components/schemas/KahootIdentifier'
+        gameType:
+          description: Type of the game that was played
+          type: string
+          allOf:
+          - $ref: '#/components/schemas/GameType'
+        startTime:
+          format: int64
+          description: Timestamp in milliseconds of when the game started
+          type: integer
+          example: 2022-03-10T16:15:50Z
+        endTime:
+          format: int64
+          description: Timestamp in milliseconds of when the game ended or is due
+            to end
+          type: integer
+          example: 2022-03-10T16:15:50Z
+        courseSessionId:
+          description: "Id of the course in which this game was played, null if not\
+            \ played as part of a course"
+          type: string
+          allOf:
+          - $ref: '#/components/schemas/UUID'
+    GameType:
+      enum:
+      - LIVE
+      - CHALLENGE
+      type: string
+    Instant:
+      format: date-time
+      type: string
+      example: 2022-03-10T16:15:50Z
+    Kahoot:
+      type: object
+      properties:
+        identifier:
+          description: Unique identification of the kahoot version played as part
+            of this game
+          type: object
+          allOf:
+          - $ref: '#/components/schemas/KahootIdentifier'
+        title:
+          description: Title of the kahoot
+          type: string
+        description:
+          description: Description of the kahoot
+          type: string
+        questions:
+          description: List of questions contained within the kahoot
+          type: array
+          items:
+            $ref: '#/components/schemas/KahootBlock'
+          discriminator:
+            propertyName: type
+            mapping:
+              SINGLE_SELECT_QUIZ: '#/components/schemas/SingleSelectQuizBlock'
+              MULTI_SELECT_QUIZ: '#/components/schemas/MultiSelectQuizBlock'
+              TRUE_FALSE: '#/components/schemas/TrueFalseBlock'
+              WORD_CLOUD: '#/components/schemas/WordCloudBlock'
+              BRAINSTORMING: '#/components/schemas/BrainstormingBlock'
+              OPEN_ENDED: '#/components/schemas/OpenEndedBlock'
+              CONTENT: '#/components/schemas/ContentBlock'
+              PUZZLE: '#/components/schemas/PuzzleBlock'
+              SINGLE_SELECT_POLL: '#/components/schemas/SingleSelectPollBlock'
+              MULTI_SELECT_POLL: '#/components/schemas/MultiSelectPollBlock'
+              TYPE_ANSWER: '#/components/schemas/TypeAnswerBlock'
+              SLIDER: '#/components/schemas/SliderBlock'
+              DROP_PIN: '#/components/schemas/DropPinBlock'
+              UNMAPPED: '#/components/schemas/UnmappedBlock'
+        creatorId:
+          description: User id of the creator of the kahoot
+          type: string
+          allOf:
+          - $ref: '#/components/schemas/UUID'
+        organisationId:
+          description: Id of the organisation in which the kahoot was created
+          type: string
+          allOf:
+          - $ref: '#/components/schemas/UUID'
+        created:
+          format: int64
+          description: "Timestamp, in millis, indicating when the kahoot was created"
+          type: integer
+          example: 2022-03-10T16:15:50Z
+        modified:
+          format: int64
+          description: "Timestamp, in millis, indicating when the kahoot was last\
+            \ updated"
+          type: integer
+          example: 2022-03-10T16:15:50Z
+    KahootBlock:
+      description: Represents a single kahoot block (question or content)
+      type: object
+      properties:
+        contentType:
+          description: Value that indicates the type of block
+          type: string
+          allOf:
+          - $ref: '#/components/schemas/KahootBlockType'
+        blockIndex:
+          format: int32
+          description: Index of this block within the containing kahoot (zero-based)
+          type: integer
+        hasMedia:
+          description: Flag that indicates whether this block has media attached to
+            it
+          type: boolean
+      discriminator:
+        propertyName: contentType
+        mapping:
+          SINGLE_SELECT_QUIZ: '#/components/schemas/SingleSelectQuizBlock'
+          MULTI_SELECT_QUIZ: '#/components/schemas/MultiSelectQuizBlock'
+          TRUE_FALSE: '#/components/schemas/TrueFalseBlock'
+          WORD_CLOUD: '#/components/schemas/WordCloudBlock'
+          BRAINSTORMING: '#/components/schemas/BrainstormingBlock'
+          OPEN_ENDED: '#/components/schemas/OpenEndedBlock'
+          CONTENT: '#/components/schemas/ContentBlock'
+          PUZZLE: '#/components/schemas/PuzzleBlock'
+          SINGLE_SELECT_POLL: '#/components/schemas/SingleSelectPollBlock'
+          MULTI_SELECT_POLL: '#/components/schemas/MultiSelectPollBlock'
+          TYPE_ANSWER: '#/components/schemas/TypeAnswerBlock'
+          SLIDER: '#/components/schemas/SliderBlock'
+          DROP_PIN: '#/components/schemas/DropPinBlock'
+          UNMAPPED: '#/components/schemas/UnmappedBlock'
+    KahootBlockType:
+      enum:
+      - SINGLE_SELECT_QUIZ
+      - MULTI_SELECT_QUIZ
+      - TRUE_FALSE
+      - WORD_CLOUD
+      - BRAINSTORMING
+      - OPEN_ENDED
+      - CONTENT
+      - PUZZLE
+      - SINGLE_SELECT_POLL
+      - MULTI_SELECT_POLL
+      - TYPE_ANSWER
+      - SLIDER
+      - DROP_PIN
+      - UNMAPPED
+      type: string
+    KahootIdentifier:
+      required:
+      - id
+      type: object
+      properties:
+        id:
+          description: Unique id of the kahoot
+          type: string
+          allOf:
+          - $ref: '#/components/schemas/UUID'
+        version:
+          format: int32
+          description: Version of the kahoot where 0 indicated not versioned.
+          minimum: 0
+          type: integer
+    KahootVersion:
+      type: object
+      properties:
+        identifier:
+          $ref: '#/components/schemas/KahootIdentifier'
+        createdAt:
+          $ref: '#/components/schemas/Instant'
+        creator:
+          $ref: '#/components/schemas/UUID'
+    MultiSelectPollAnswer:
+      description: Represents a single player's answer to a 'multi-select poll' block
+      type: object
+      properties:
+        choiceIndexes:
+          description: Choices selected by the player
+          uniqueItems: true
+          type: array
+          items:
+            format: int32
+            type: integer
+        type:
+          description: The type of a block this answer refers to
+          type: string
+          allOf:
+          - $ref: '#/components/schemas/KahootBlockType'
+    MultiSelectPollBlock:
+      type: object
+      properties:
+        contentType:
+          description: Value that indicates the type of block
+          type: string
+          allOf:
+          - $ref: '#/components/schemas/KahootBlockType'
+        blockIndex:
+          format: int32
+          description: Index of this block within the containing kahoot (zero-based)
+          type: integer
+        hasMedia:
+          description: Flag that indicates whether this block has media attached to
+            it
+          type: boolean
+        question:
+          description: The text to be displayed for this question
+          type: string
+        choices:
+          description: List of choices that are available for this question
+          type: array
+          items:
+            $ref: '#/components/schemas/PollElement'
+    MultiSelectQuizAnswer:
+      description: Represents a single player's answer to a 'multi-select quiz' block
+      type: object
+      properties:
+        choiceIndexes:
+          description: Choices selected by the player
+          uniqueItems: true
+          type: array
+          items:
+            format: int32
+            type: integer
+        points:
+          format: int32
+          description: The number of points the player got for this question
+          type: integer
+        type:
+          description: The type of a block this answer refers to
+          type: string
+          allOf:
+          - $ref: '#/components/schemas/KahootBlockType'
+        correctness:
+          $ref: '#/components/schemas/AnswerCorrectness'
+    MultiSelectQuizBlock:
+      type: object
+      properties:
+        contentType:
+          description: Value that indicates the type of block
+          type: string
+          allOf:
+          - $ref: '#/components/schemas/KahootBlockType'
+        blockIndex:
+          format: int32
+          description: Index of this block within the containing kahoot (zero-based)
+          type: integer
+        hasMedia:
+          description: Flag that indicates whether this block has media attached to
+            it
+          type: boolean
+        question:
+          description: The text to be displayed for this question
+          type: string
+        choices:
+          description: List of choices that are available for this question
+          type: array
+          items:
+            $ref: '#/components/schemas/SelectElement'
+    OpenEndedAnswer:
+      description: Represents a single player's answer to an 'open-ended' block
+      type: object
+      properties:
+        text:
+          description: |
+            The text typed-in by the player as displayed on the screen.
+            Can be normalized to match answers with different case or punctuation.
+            Might have profanity removed from it.
+          type: string
+        originalText:
+          description: The text exactly as it was typed-in by the player
+          type: string
+        type:
+          description: The type of a block this answer refers to
+          type: string
+          allOf:
+          - $ref: '#/components/schemas/KahootBlockType'
+        keywords:
+          description: The list of keywords from the originalText that were highlighted
+            by the player
+          type: array
+          items:
+            type: string
+    OpenEndedBlock:
+      type: object
+      properties:
+        contentType:
+          description: Value that indicates the type of block
+          type: string
+          allOf:
+          - $ref: '#/components/schemas/KahootBlockType'
+        blockIndex:
+          format: int32
+          description: Index of this block within the containing kahoot (zero-based)
+          type: integer
+        hasMedia:
+          description: Flag that indicates whether this block has media attached to
+            it
+          type: boolean
+        question:
+          description: The text to be displayed for this question
+          type: string
+    Organisation:
+      type: object
+      properties:
+        organisationId:
+          description: Unique id of the organisation
+          type: string
+          allOf:
+          - $ref: '#/components/schemas/UUID'
+        name:
+          description: Name of the organisation
+          type: string
+    PagedResponseGameParticipant:
+      type: object
+      properties:
+        data:
+          description: List of data object found for the request
+          type: array
+          items:
+            $ref: '#/components/schemas/GameParticipant'
+        cursor:
+          description: "Cursor to be used to iterate through the remaining results,\
+            \ null if there are no more results"
+          type: string
+    PagedResponseGameSession:
+      type: object
+      properties:
+        data:
+          description: List of data object found for the request
+          type: array
+          items:
+            $ref: '#/components/schemas/GameSession'
+        cursor:
+          description: "Cursor to be used to iterate through the remaining results,\
+            \ null if there are no more results"
+          type: string
+    PagedResponseKahootVersion:
+      type: object
+      properties:
+        data:
+          description: List of data object found for the request
+          type: array
+          items:
+            $ref: '#/components/schemas/KahootVersion'
+        cursor:
+          description: "Cursor to be used to iterate through the remaining results,\
+            \ null if there are no more results"
+          type: string
+    PagedResponseUser:
+      type: object
+      properties:
+        data:
+          description: List of data object found for the request
+          type: array
+          items:
+            $ref: '#/components/schemas/User'
+        cursor:
+          description: "Cursor to be used to iterate through the remaining results,\
+            \ null if there are no more results"
+          type: string
+    ParticipantAnswer:
+      description: Provides the information of what has given participant answered
+        to the question
+      type: object
+      properties:
+        participantId:
+          format: int32
+          description: |-
+            Unique id within the game of this participant who gave this answer.
+            Refers to GameParticipant.participantId property
+          type: integer
+        status:
+          $ref: '#/components/schemas/AnswerStatus'
+        answer:
+          description: The answer provided for the question. Will be missing in case
+            of a timeout.
+          type: object
+          allOf:
+          - $ref: '#/components/schemas/Answer'
+          nullable: true
+    PollElement:
+      type: object
+      properties:
+        answerText:
+          description: The text to be displayed for this choice
+          type: string
+        hasMedia:
+          description: Flag indicating whether there is media attached to this choice
+          type: boolean
+    PuzzleAnswer:
+      description: Represents a single player's answer to a 'puzzle' block
+      type: object
+      properties:
+        points:
+          format: int32
+          description: The number of points the player got for this question
+          type: integer
+        type:
+          description: The type of a block this answer refers to
+          type: string
+          allOf:
+          - $ref: '#/components/schemas/KahootBlockType'
+        order:
+          description: The order of the answers chosen by the player (zero-based indexes)
+          type: array
+          items:
+            format: int32
+            type: integer
+        correctness:
+          $ref: '#/components/schemas/AnswerCorrectness'
+    PuzzleBlock:
+      type: object
+      properties:
+        contentType:
+          description: Value that indicates the type of block
+          type: string
+          allOf:
+          - $ref: '#/components/schemas/KahootBlockType'
+        blockIndex:
+          format: int32
+          description: Index of this block within the containing kahoot (zero-based)
+          type: integer
+        hasMedia:
+          description: Flag that indicates whether this block has media attached to
+            it
+          type: boolean
+        question:
+          description: The text to be displayed for this question
+          type: string
+        choices:
+          description: List of choices that are available for this question
+          type: array
+          items:
+            $ref: '#/components/schemas/PuzzleElement'
+    PuzzleElement:
+      type: object
+      properties:
+        answerText:
+          description: The text to be displayed for this choice
+          type: string
+        correctPosition:
+          format: int32
+          description: Number indicating what the correct position for this block
+            is
+          type: integer
+        hasMedia:
+          description: Flag indicating whether there is media attached to this choice
+          type: boolean
+    SelectElement:
+      type: object
+      properties:
+        answerText:
+          description: The text to be displayed for this choice
+          type: string
+        isCorrect:
+          description: Flag indicating whether or not this answer is considered correct
+          type: boolean
+        hasMedia:
+          description: Flag indicating whether there is media attached to this choice
+          type: boolean
+        correct:
+          description: Flag indicating whether or not this answer is considered correct
+          type: boolean
+    SingleSelectPollAnswer:
+      description: Represents a single player's answer to a 'single-select poll' block
+      type: object
+      properties:
+        choice:
+          format: int32
+          description: "Index of the choice selected by the player (zero-based, as\
+            \ on the question choices list)"
+          type: integer
+        type:
+          description: The type of a block this answer refers to
+          type: string
+          allOf:
+          - $ref: '#/components/schemas/KahootBlockType'
+    SingleSelectPollBlock:
+      type: object
+      properties:
+        contentType:
+          description: Value that indicates the type of block
+          type: string
+          allOf:
+          - $ref: '#/components/schemas/KahootBlockType'
+        blockIndex:
+          format: int32
+          description: Index of this block within the containing kahoot (zero-based)
+          type: integer
+        hasMedia:
+          description: Flag that indicates whether this block has media attached to
+            it
+          type: boolean
+        question:
+          description: The text to be displayed for this question
+          type: string
+        choices:
+          description: List of choices that are available for this question
+          type: array
+          items:
+            $ref: '#/components/schemas/PollElement'
+    SingleSelectQuizAnswer:
+      description: Represents a single player's answer to a 'single-select quiz' block
+      type: object
+      properties:
+        choice:
+          format: int32
+          description: "Index of the choice selected by the player (zero-based, as\
+            \ on the question choices list)"
+          type: integer
+        points:
+          format: int32
+          description: The number of points the player got for this question
+          type: integer
+        type:
+          description: The type of a block this answer refers to
+          type: string
+          allOf:
+          - $ref: '#/components/schemas/KahootBlockType'
+        correctness:
+          $ref: '#/components/schemas/AnswerCorrectness'
+    SingleSelectQuizBlock:
+      type: object
+      properties:
+        contentType:
+          description: Value that indicates the type of block
+          type: string
+          allOf:
+          - $ref: '#/components/schemas/KahootBlockType'
+        blockIndex:
+          format: int32
+          description: Index of this block within the containing kahoot (zero-based)
+          type: integer
+        hasMedia:
+          description: Flag that indicates whether this block has media attached to
+            it
+          type: boolean
+        question:
+          description: The text to be displayed for this question
+          type: string
+        choices:
+          description: List of choices that are available for this question
+          type: array
+          items:
+            $ref: '#/components/schemas/SelectElement'
+    SliderAnswer:
+      description: Represents a single player's answer to a 'slider' block
+      type: object
+      properties:
+        points:
+          format: int32
+          description: The number of points the player got for this question
+          type: integer
+        type:
+          description: The type of a block this answer refers to
+          type: string
+          allOf:
+          - $ref: '#/components/schemas/KahootBlockType'
+        value:
+          format: double
+          description: The value selected by the user
+          type: number
+        correctness:
+          $ref: '#/components/schemas/AnswerCorrectness'
+    SliderBlock:
+      type: object
+      properties:
+        contentType:
+          description: Value that indicates the type of block
+          type: string
+          allOf:
+          - $ref: '#/components/schemas/KahootBlockType'
+        blockIndex:
+          format: int32
+          description: Index of this block within the containing kahoot (zero-based)
+          type: integer
+        hasMedia:
+          description: Flag that indicates whether this block has media attached to
+            it
+          type: boolean
+        question:
+          description: The text to be displayed for this question
+          type: string
+        correctValue:
+          format: double
+          description: |
+            The correct value for this question.
+            The player needs to provide this exact value to consider the answer 'correct'
+          type: number
+        tolerance:
+          format: float
+          description: The tolerance to be applied when determining if an answer should
+            be considered 'almost correct'
+          type: number
+        unit:
+          description: String representation of the units used in the slider
+          type: string
+        range:
+          description: Object representing how the scale is displayed
+          type: object
+          allOf:
+          - $ref: '#/components/schemas/SliderRange'
+    SliderRange:
+      type: object
+      properties:
+        minimumValue:
+          format: double
+          description: The minimum value to use on the scale
+          type: number
+        maximumValue:
+          format: double
+          description: The maximum value to use on the scale
+          type: number
+        stepValue:
+          format: double
+          description: The step value used when scrolling between the minimum and
+            maximum values
+          type: number
+    TextAnswerAcceptance:
+      description: |2
+          Represents the way answer given by player was accepted as 'correct':
+
+          AUTOMATIC_MATCH - the answer was automatically matched with one of the 'acceptable answers' provided in the corresponding kahoot block
+
+          APPROVED_BY_HOST - the answer was manually approved by the game host during the gameplay
+
+          (null) - in case of wrong answer
+      enum:
+      - AUTOMATIC_MATCH
+      - APPROVED_BY_HOST
+      type: string
+      nullable: true
+    TrueFalseAnswer:
+      description: Represents a single player's answer to a 'type answer' block
+      type: object
+      properties:
+        points:
+          format: int32
+          description: The number of points the player got for this question
+          type: integer
+        type:
+          description: The type of a block this answer refers to
+          type: string
+          allOf:
+          - $ref: '#/components/schemas/KahootBlockType'
+        choice:
+          description: The the choice selected by the player (True or False)
+          type: boolean
+        correctness:
+          $ref: '#/components/schemas/AnswerCorrectness'
+    TrueFalseBlock:
+      type: object
+      properties:
+        contentType:
+          description: Value that indicates the type of block
+          type: string
+          allOf:
+          - $ref: '#/components/schemas/KahootBlockType'
+        blockIndex:
+          format: int32
+          description: Index of this block within the containing kahoot (zero-based)
+          type: integer
+        hasMedia:
+          description: Flag that indicates whether this block has media attached to
+            it
+          type: boolean
+        question:
+          description: The text to be displayed for this question
+          type: string
+        correctAnswer:
+          description: Flag which indicates whether the answer to the question is
+            true or false
+          type: boolean
+    TypeAnswerBlock:
+      type: object
+      properties:
+        contentType:
+          description: Value that indicates the type of block
+          type: string
+          allOf:
+          - $ref: '#/components/schemas/KahootBlockType'
+        blockIndex:
+          format: int32
+          description: Index of this block within the containing kahoot (zero-based)
+          type: integer
+        hasMedia:
+          description: Flag that indicates whether this block has media attached to
+            it
+          type: boolean
+        question:
+          description: The text to be displayed for this question
+          type: string
+        acceptableAnswers:
+          description: List of the acceptable answers for this question
+          uniqueItems: true
+          type: array
+          items:
+            type: string
+    TypeAnswerResponse:
+      description: Represents a single player's answer to a 'type answer' block
+      type: object
+      properties:
+        text:
+          description: |
+            The text typed-in by the player as displayed on the screen.
+            Can be normalized to match answers with different case or punctuation.
+            Might have profanity removed from it.
+          type: string
+        originalText:
+          description: The text exactly as it was typed-in by the player
+          type: string
+        points:
+          format: int32
+          description: The number of points the player got for this question
+          type: integer
+        type:
+          description: The type of a block this answer refers to
+          type: string
+          allOf:
+          - $ref: '#/components/schemas/KahootBlockType'
+        correctness:
+          $ref: '#/components/schemas/AnswerCorrectness'
+        answerAcceptance:
+          $ref: '#/components/schemas/TextAnswerAcceptance'
+    UUID:
+      format: uuid
+      pattern: "[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}"
+      type: string
+    UnmappedBlock:
+      type: object
+      properties:
+        contentType:
+          description: Value that indicates the type of block
+          type: string
+          allOf:
+          - $ref: '#/components/schemas/KahootBlockType'
+        blockIndex:
+          format: int32
+          description: Index of this block within the containing kahoot (zero-based)
+          type: integer
+        hasMedia:
+          description: Flag that indicates whether this block has media attached to
+            it
+          type: boolean
+        originalType:
+          description: The string representation of the type of the unmapped block
+          type: string
+    User:
+      type: object
+      properties:
+        userId:
+          description: Unique id of the user
+          type: string
+          allOf:
+          - $ref: '#/components/schemas/UUID'
+        username:
+          description: Username of the user
+          type: string
+        email:
+          description: Email of the user
+          type: string
+        name:
+          description: Given name of the user
+          type: string
+        organisationId:
+          description: Id of the organisation that the user is part of
+          type: string
+          allOf:
+          - $ref: '#/components/schemas/UUID'
+    WordCloudAnswer:
+      description: Represents a single player's answer to a 'word cloud' block
+      type: object
+      properties:
+        text:
+          description: |
+            The text typed-in by the player as displayed on the screen.
+            Can be normalized to match answers with different case or punctuation.
+            Might have profanity removed from it.
+          type: string
+        originalText:
+          description: The text exactly as it was typed-in by the player
+          type: string
+        type:
+          description: The type of a block this answer refers to
+          type: string
+          allOf:
+          - $ref: '#/components/schemas/KahootBlockType'
+    WordCloudBlock:
+      type: object
+      properties:
+        contentType:
+          description: Value that indicates the type of block
+          type: string
+          allOf:
+          - $ref: '#/components/schemas/KahootBlockType'
+        blockIndex:
+          format: int32
+          description: Index of this block within the containing kahoot (zero-based)
+          type: integer
+        hasMedia:
+          description: Flag that indicates whether this block has media attached to
+            it
+          type: boolean
+        question:
+          description: The text to be displayed for this question
+          type: string
+  securitySchemes:
+    ClientCredentials:
+      type: oauth2
+      description: Use client id and secret for authorisation
+      name: bearer
+      scheme: bearer
+      bearerFormat: Opaque
+      flows:
+        clientCredentials:
+          tokenUrl: https://access-2.kahoot.com/auth/realms/kahoot-api/protocol/openid-connect/token
+          scopes: {}

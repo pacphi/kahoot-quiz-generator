@@ -1,57 +1,72 @@
 # Kahoot Quiz Generator
 
+* [Background](#background)
+* [Getting started](#getting-started)
+* [Promot history](#prompt-history)
+* [Build attempts](#build-attempts)
+* [Prerequisites](#prerequisites)
+* How to
+  * [Clone](#how-to-clone)
+  * [Build](#how-to-build)
+  * [Run](#how-to-run)
+
 ## Background
 
 My spouse wanted to create a number of themed New Year's Eve trivia matches hosted on [Kahoot](https://kahoot.com/).
 
-While she could sign up for an account and work thru their user interface to curate a quiz herself, I wanted to make it easier and less tedious for her to generate quizzes.
+While anyone can sign up for a free account and work thru the user interface to curate a quiz, I wanted to make it easier and less tedious to generate quizzes.
+
+It's a great candidate use-case for applying an LLM, mixing in a minimal amount of business logic.
 
 > Note: AI tools are available starting with a [Personal Kahoot+ Gold](https://kahoot.com/register/pricing-personal/) account, [here](https://support.kahoot.com/hc/en-us/articles/17152945038355-How-to-use-Kahoot-AI-tools) which includes the ability to generate questions based on a topic.
 
-Why not use this as an opportunity to flex [Claude](https://claude.ai), and see how far I can go creating an agent with my favorite tech stack? And stay compliant with Kahoot's [Acceptable Use Policy](https://trust.kahoot.com/acceptable-use-policy/).
+I thought, why not use this as an opportunity to flex [Claude](https://claude.ai). See how far I can go creating an agent with my favorite tech stack.  And stay compliant with Kahoot's [Acceptable Use Policy](https://trust.kahoot.com/acceptable-use-policy/).
 
-I wound up changing my approach when I learned that Kahoot's Reporting API was limited to read-only operations.  What I ultimately settled on was the ability to produce quiz questions [packaged for upload](https://kahoot.com/blog/2018/08/23/import-kahoot-from-spreadsheet/) conforming to Kahoot's [Quiz spreadsheet template](https://kahoot.com/library/quiz-spreadsheet-template/).
+Some trial and error resulted in me changing my approach;  consequently when I learned that Kahoot's Reporting API was limited to read-only operations.
 
-## I started with
+What I ultimately settled on was the ability to produce quiz questions [packaged for upload](https://kahoot.com/blog/2018/08/23/import-kahoot-from-spreadsheet/) conforming to Kahoot's [Quiz spreadsheet template](https://kahoot.com/library/quiz-spreadsheet-template/).
+
+## Getting started
+
+I got started with:
 
 * A Github [account](https://github.com/signup)
 * A Claude.ai Pro [plan](https://www.anthropic.com/pricing)
 * This Spring Initializr [configuration](https://start.spring.io/#!type=maven-project&language=java&platformVersion=3.4.1&packaging=jar&jvmVersion=21&groupId=me.pacphi&artifactId=kahoot-quiz-generator&name=Kahoot%20Quiz%20Generator&description=I%20create%20quizzes%20for%20you%20in%20Kahoot%20based%20on%20your%20prompt&packageName=me.pacphi.kahoot&dependencies=spring-ai-openai,web,configuration-processor,devtools,docker-compose)
 * Kahoot credentials
 
-## Claude prompts
+## Prompt history
+
+What follows here are the prompts I employed to help me code generate some pieces of this application.  If you're not interested, skip to [How to clone](#how-to-clone).
 
 ### Initial prompt
 
-```commandline
-I would like to build a chat interface that allows for user to generate questions with 4 multiple choice answers where only one answer is correct.  These  will then be automatically uploaded to Kahoot via API calls.  Can you implement this in ReactJS for the front-end and Spring Boot and Spring AI on the backend?
-```
+"I would like to build a chat interface that allows for user to generate questions with 4 multiple choice answers where only one answer is correct.  These  will then be automatically uploaded to Kahoot via API calls.  Can you implement this in ReactJS for the front-end and Spring Boot and Spring AI on the backend?"
 
 ### Second prompt
 
-```commandline
-Actually, what I require is something where a user could type in a chat request like:
+"Actually, what I require is something where a user could type in a chat request like:
 
-"I am curating a set of questions for New Year's Eve trivia match hosted on Kahoot.  I need you to construct a teen appropriate set of questions with four alternative answers for each of 20 questions.  Each question has only one correct answer.  Go."
+I am curating a set of questions for New Year's Eve trivia match hosted on Kahoot.  I need you to construct a teen appropriate set of questions with four alternative answers for each of 20 questions.  Each question has only one correct answer.  Go.
 
 And that request would invoke appropriate set of APIs.
 
-Those APIs are available in this Open API spec
-```
+Those APIs are available in this Open API spec"
+
 
 > The Kahoot API specification was found [here](https://results.kahoot.com/openapi).  I actually followed a link from [here](https://results.kahoot.com/swagger/). But where I actually started searching was within some public documentation [here](https://support.kahoot.com/hc/en-us/articles/11735948502931-Guide-to-Kahoot-reports-API).
 
 ### Research prompts
 
-```commandline
-I see you created domain objects like KahootBlock and KahootResponse.  I assume you constructed these from the OpenAPI spec?  What Java tools exist to read a spec and code generate these model objects automatically?
-```
+"I see you created domain objects like KahootBlock and KahootResponse.  I assume you constructed these from the OpenAPI spec?  What Java tools exist to read a spec and code generate these model objects automatically?"
+
 
 I chose [this](https://github.com/OpenAPITools/openapi-generator/blob/master/modules/openapi-generator-maven-plugin/README.md) Maven plugin.
 
-```commmandline
-When I used the suggested plugin with mvn package I saw:
 
+"When I used the suggested plugin with mvn package I saw:
+
+```bash
 [WARNING] /Users/cphillipson/Documents/development/apps/kahoot-quiz-generator/src/main/resources/openapi/kahoot-openapiv3-spec.yml [0:0]: unexpected error in Open-API generation
 org.openapitools.codegen.SpecValidationException: There were issues with the specification. The option can be disabled via validateSpec (Maven/Gradle) or --skip-validate-spec (CLI).
  | Error count: 1, Warning count: 33
@@ -59,9 +74,10 @@ Errors:
 	-attribute components.securitySchemes.ClientCredentials.scopes is missing
 Warnings:
 	-attribute components.securitySchemes.ClientCredentials.scopes is missing
-
-How might I fix that?
 ```
+
+How might I fix that?"
+
 
 Claude mentioned that I had to add `scopes` to my spec, like so:
 
@@ -80,15 +96,12 @@ components:
           scopes: {} # Add this empty scopes object to fix the error
 ```
 
-```commandline
-You generated a front-end and back-end for me.  I want to be able to build both from Maven. Is there a way I can execute mvn package then mvn spring-boot:run to have this just work?  How does the app consume the ReactJS you created?  Let me know the easiest way to do this, then show me the implementation and any changes/additions to project structure.
-```
+"You generated a front-end and back-end for me.  I want to be able to build both from Maven. Is there a way I can execute mvn package then mvn spring-boot:run to have this just work?  How does the app consume the ReactJS you created?  Let me know the easiest way to do this, then show me the implementation and any changes/additions to project structure."
 
 I wanted to provide a seamless development experience building and running a Spring Boot application that has a ReactJS front-end using Maven.  Claude didn't let me down.  It recommended that I leverage the [frontend-maven-plugin](https://github.com/eirslett/frontend-maven-plugin).
 
-```commandline
-Where do I place the Quiz Generator Form Component within the project structure?  And can you explicitly tell me what other supporting files I should add to have the build complete successfully?
-```
+
+"Where do I place the Quiz Generator Form Component within the project structure?  And can you explicitly tell me what other supporting files I should add to have the build complete successfully?"
 
 Claude told me how and where to place .css, .html, .json and .jsx files.
 
@@ -116,28 +129,24 @@ So, the front-end consists of:
 
 ### Refinement prompts
 
-```commandline
-Can you replace RestTemplate usage in KahootService with RestClient? And just constructor inject an instance of it?
-```
+"Can you replace RestTemplate usage in KahootService with RestClient? And just constructor inject an instance of it?"
 
-```commandline
-Can you replace occurrence of OpenAiClient with ChatClient.  Maybe inject a ChatModel, like so
+"Can you replace occurrence of OpenAiClient with ChatClient.  Maybe inject a ChatModel, like so
 
+```java
 public KahootService(ChatModel model, RestClient.Builder restClientBuilder) {
  this.chatClient = ChatClient.builder(model)
  .defaultAdvisors(
 new SimpleLoggerAdvisor())
  .build();
-...
-
-We want to use chatClient methods so we have flexibility to swap chat model providers.
 ```
 
-```commandline
-Can you generate a Java record for KahootQuestion for me that's used in the KahootService?
-```
+We want to use chatClient methods so we have flexibility to swap chat model providers."
 
-## Build journey
+"Can you generate a Java record for KahootQuestion for me that's used in the KahootService?"
+
+
+## Build attempts
 
 ### First try
 
@@ -215,7 +224,7 @@ package org.openapitools.jackson.nullable does not exist
 
 which meant I had to add two more dependencies
 
-```
+```yaml
 <dependency>
     <groupId>jakarta.validation</groupId>
     <artifactId>jakarta.validation-api</artifactId>
@@ -277,9 +286,9 @@ Because I hit a dead-end - Kahoot's Reporting API limited to read-only operation
 
 I started a new chat with Claude and entered this prompt
 
-```commandline
-You are a Java and Spring expert. You are also aware of Apache POI for generating Microsoft Office documents like Excel (.xlsx) spreadsheets.  I want to build an application that has both a front-end and back-end. The front-end I'd like you to implement with ReactJS, the back end wth Java and Spring an other necessary dependencies.  The project will be built with Maven.  The application will take as input from the user: a) a topic, theme or directive and b) a number of questions in order to generate  a Kahoot quiz.  The quiz questions and multiple choice answers will be written to an Excel (.xlsx) file adhering to the format and validation of the Kahoot Quiz template. I need you to consider the use of the Kahoot Reporting API spec, but I will provide model object named KahootQuestion.  We'll use Spring AI's ChatModel support to generate the questions.  I'm going to feed you a few pieces, then I'd like you to draft a complete implementation.
+"You are a Java and Spring expert. You are also aware of Apache POI for generating Microsoft Office documents like Excel (.xlsx) spreadsheets.  I want to build an application that has both a front-end and back-end. The front-end I'd like you to implement with ReactJS, the back end wth Java and Spring an other necessary dependencies.  The project will be built with Maven.  The application will take as input from the user: a) a topic, theme or directive and b) a number of questions in order to generate  a Kahoot quiz.  The quiz questions and multiple choice answers will be written to an Excel (.xlsx) file adhering to the format and validation of the Kahoot Quiz template. I need you to consider the use of the Kahoot Reporting API spec, but I will provide model object named KahootQuestion.  We'll use Spring AI's ChatModel support to generate the questions.  I'm going to feed you a few pieces, then I'd like you to draft a complete implementation."
 
+```java
 import java.util.List;
 /**
  * Represents a single Kahoot quiz question with multiple choice answers.

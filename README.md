@@ -170,7 +170,7 @@ Warnings:
 
 ### Second try
 
-I edited [src/main/resources/openapi/kahoot-openapiv3-spec.yml](kahoot-openapiv3-spec.yml) as suggested by addding `scopes: {}`.
+I edited [openapi/kahoot-openapiv3-spec.yml](src/main/resources/openapi/kahoot-openapiv3-spec.yml) as suggested by addding `scopes: {}`.
 
 Then tried
 

@@ -1,18 +1,16 @@
 package me.pacphi.kahoot.service;
 
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Objects;
 
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.ss.usermodel.WorkbookFactory;
+import org.apache.poi.ss.usermodel.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
@@ -22,55 +20,109 @@ import org.springframework.util.StreamUtils;
 @Service
 public class ExcelService {
 
+    private static final Logger log = LoggerFactory.getLogger(ExcelService.class);
+    private static final String TEMPLATE_PATH = "classpath:/templates/Kahoot-Quiz-Spreadsheet-Template.xlsx";
+    private static final int STARTING_ROW = 8;
+    private static final int DEFAULT_TIME_LIMIT = 15;
+
     private final ResourceLoader resourceLoader;
 
     public ExcelService(ResourceLoader resourceLoader) {
-        this.resourceLoader = resourceLoader;
+        this.resourceLoader = Objects.requireNonNull(resourceLoader, "ResourceLoader must not be null");
     }
 
     public Resource generateKahootTemplate(List<KahootQuestion> questions) throws IOException {
-        // Read in the Kahoot Quiz template from the classpath
-        Resource template = resourceLoader.getResource("classpath:/templates/Kahoot-Quiz-Spreadsheet-Template.xlsx");
-        // Write a time-stamped copy of the template to the /tmp directory
-        String tmpDir = System.getProperty("java.io.tmpdir");
-        LocalDateTime now = LocalDateTime.now();
-        String timestamp = now.format(DateTimeFormatter.ofPattern("yyyy.MM.dd.HH.ss"));
-        String quizFilePath = String.format("%s/kahoot-quiz.%s.xlsx", tmpDir, timestamp);
-        File targetFile = new File(quizFilePath);
-        FileOutputStream outputStream = new FileOutputStream(targetFile);
-        StreamUtils.copy(template.getInputStream(), outputStream);
-        outputStream.close();
-        // Read in the time-stamped quiz file; this is where we'll add questions and answers
-        Resource quizQuestions = resourceLoader.getResource(quizFilePath);
-        try (Workbook workbook = WorkbookFactory.create(quizQuestions.getInputStream())) {
+        validateQuestions(questions);
+
+        Path tempFile = createTemporaryFile();
+        log.info("Created temporary file: {}", tempFile);
+
+        try {
+            copyTemplate(tempFile);
+            populateQuestions(questions, tempFile);
+            return new InputStreamResource(Files.newInputStream(tempFile));
+        } catch (Exception e) {
+            cleanupFile(tempFile);
+            throw new IOException("Failed to generate Kahoot template", e);
+        }
+    }
+
+    private void validateQuestions(List<KahootQuestion> questions) {
+        if (questions == null || questions.isEmpty()) {
+            throw new IllegalArgumentException("Questions list cannot be null or empty");
+        }
+
+        questions.forEach(question -> {
+            if (question.choices() == null || question.choices().isEmpty()) {
+                throw new IllegalArgumentException("Question must have choices: " + question.question());
+            }
+            if (question.choices().stream().noneMatch(KahootQuestion.Choice::isCorrect)) {
+                throw new IllegalArgumentException(
+                        "Question must have at least one correct answer: " + question.question());
+            }
+        });
+    }
+
+    private Path createTemporaryFile() throws IOException {
+        String timestamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy.MM.dd.HH.mm.ss"));
+        return Files.createTempFile("kahoot-quiz-" + timestamp + "-", ".xlsx");
+    }
+
+    private void copyTemplate(Path targetPath) throws IOException {
+        Resource template = resourceLoader.getResource(TEMPLATE_PATH);
+        if (!template.exists()) {
+            throw new FileNotFoundException("Template file not found: " + TEMPLATE_PATH);
+        }
+
+        try (InputStream is = template.getInputStream();
+                OutputStream os = Files.newOutputStream(targetPath)) {
+            StreamUtils.copy(is, os);
+        }
+        log.debug("Template copied to: {}", targetPath);
+    }
+
+    private void populateQuestions(List<KahootQuestion> questions, Path filePath) throws IOException {
+        try (InputStream is = Files.newInputStream(filePath);
+                Workbook workbook = WorkbookFactory.create(is)) {
+
             Sheet sheet = workbook.getSheetAt(0);
-            int rowNum = 9; // Start after header
+            int rowNum = STARTING_ROW;
 
             for (KahootQuestion question : questions) {
-                Row row = sheet.createRow(rowNum++);
-
-                // Question
-                row.createCell(0).setCellValue(question.question());
-
-                // Time limit (default 15 seconds)
-                row.createCell(5).setCellValue(15);
-
-                // Answer options
-                for (int i = 0; i < question.choices().size(); i++) {
-                    KahootQuestion.Choice choice = question.choices().get(i);
-                    row.createCell(1 + i).setCellValue(choice.answerText());
-                    if (choice.isCorrect()) {
-                        row.createCell(6).setCellValue(i + 1); // Correct answer (1-based)
-                    }
-                }
+                updateQuestionRow(sheet, rowNum++, question);
             }
-            // Write quiz file's question-and-answer additions to file-system
-            ByteArrayOutputStream quizFileOutputStream = new ByteArrayOutputStream();
-            workbook.write(quizFileOutputStream);
-            quizFileOutputStream.close();
 
-            // Stream the contents of the file
-            return new InputStreamResource(new FileInputStream(targetFile));
+            try (OutputStream os = Files.newOutputStream(filePath)) {
+                workbook.write(os);
+            }
+            log.info("Successfully populated {} questions", questions.size());
+        }
+    }
+
+    private void updateQuestionRow(Sheet sheet, int rowNum, KahootQuestion question) {
+        Row row = sheet.getRow(rowNum);
+        if (row == null) {
+            row = sheet.createRow(rowNum);
+        }
+
+        row.getCell(1, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).setCellValue(question.question());
+        row.getCell(6, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).setCellValue(DEFAULT_TIME_LIMIT);
+
+        for (int i = 0; i < question.choices().size(); i++) {
+            KahootQuestion.Choice choice = question.choices().get(i);
+            row.getCell(2 + i, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).setCellValue(choice.answerText());
+            if (choice.isCorrect()) {
+                row.getCell(7, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).setCellValue(2 + i);
+            }
+        }
+     }
+
+    private void cleanupFile(Path filePath) {
+        try {
+            Files.deleteIfExists(filePath);
+            log.debug("Cleaned up temporary file: {}", filePath);
+        } catch (IOException e) {
+            log.warn("Failed to cleanup temporary file: {}", filePath, e);
         }
     }
 }

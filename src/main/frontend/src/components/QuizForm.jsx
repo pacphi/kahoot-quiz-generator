@@ -47,7 +47,7 @@ const QuizForm = () => {
       <CardContent>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block text-sm font-medium mb-1">Quiz Topic</label>
+            <label className="block text-sm font-medium mb-1">Quiz Topic (e.g., a description or essential keywords to be included)</label>
             <input
               type="text"
               value={topic}
@@ -56,7 +56,7 @@ const QuizForm = () => {
               required
             />
           </div>
-          
+
           <div>
             <label className="block text-sm font-medium mb-1">Number of Questions</label>
             <input

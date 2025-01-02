@@ -11,6 +11,7 @@
   * [Clone](#how-to-clone)
   * [Build](#how-to-build)
   * [Run](#how-to-run)
+* [Brief demonstration](https://github.com/pacphi/kahoot-quiz-generator/raw/refs/heads/main/kahoot-quiz-generator.mp4)
 
 ## Background
 

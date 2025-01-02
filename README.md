@@ -415,3 +415,13 @@ mvn spring-boot:run
 Open your favorite browser and visit `http://localhost:8080`.
 
 > Back in terminal shell, press Ctrl+C to shutdown.
+
+### Spring profiles
+
+The `default` profile automatically activates the `openai` and `dev` profiles as specified in [application.yml](src/main/resources/application.yml).
+
+If you would like to swap LLM providers from Open AI to Groq Cloud, then you must add a command-line argument, e.g.
+
+```bash
+mvn spring-boot:run -Dspring-boot.run.arguments=--spring.profiles.active=groq-cloud,dev
+```

@@ -423,5 +423,6 @@ The `default` profile automatically activates the `openai` and `dev` profiles as
 If you would like to swap LLM providers from Open AI to Groq Cloud, then you must add a command-line argument, e.g.
 
 ```bash
+export CHAT_MODEL=llama-3.3-70b-versatile && \
 mvn spring-boot:run -Dspring-boot.run.arguments=--spring.profiles.active=groq-cloud,dev
 ```

@@ -33,7 +33,7 @@ build/
 .history/
 
 ### Sensitive ###
-config/creds.yml
+config/creds*.yml
 
 ### Node/NPM ###
 package-lock.json

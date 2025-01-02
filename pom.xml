@@ -2,6 +2,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
+
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
@@ -13,9 +14,15 @@
 	<groupId>me.pacphi</groupId>
 	<artifactId>kahoot-quiz-generator</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
+
 	<name>Kahoot Quiz Generator</name>
 	<description>I create a quiz file for you to upload to Kahoot based on your prompt</description>
-	<url>https://github.com/pacphi/kahoot-quiz-generator</url>
+
+	<scm>
+		<connection>scm:git:git://github.com/pacphi/kahoot-quiz-generator.git</connection>
+		<developerConnection>scm:git:ssh://github.com/pacphi/kahoot-quiz-generator.git</developerConnection>
+		<url>https://github.com/pacphi/kahoot-quiz-generator</url>
+	</scm>
 
 	<licenses>
 		<license>
@@ -27,8 +34,17 @@
 	<developers>
 		<developer>
 			<name>Chris Phillipson</name>
+			<roles>
+				<role>architect</role>
+				<role>developer</role>
+			</roles>
 		</developer>
 	</developers>
+
+	<issueManagement>
+		<url>https://github.com/pacphi/kahoot-quiz-generator/issues</url>
+		<system>GitHub Issues</system>
+	</issueManagement>
 
 	<properties>
 		<java.version>21</java.version>

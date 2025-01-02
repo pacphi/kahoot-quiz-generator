@@ -1,8 +1,10 @@
 # Kahoot Quiz Generator
 
+[![GA](https://img.shields.io/badge/Release-Alpha-darkred)](https://img.shields.io/badge/Release-Alpha-darkred) ![Github Action CI Workflow Status](https://github.com/pacphi/kahoot-quiz-generator/actions/workflows/ci.yml/badge.svg) [![Known Vulnerabilities](https://snyk.io/test/github/pacphi/kahoot-quiz-generator/badge.svg?style=plastic)](https://snyk.io/test/github/pacphi/kahoot-quiz-generator)
+
 * [Background](#background)
 * [Getting started](#getting-started)
-* [Promot history](#prompt-history)
+* [Prompt history](#prompt-history)
 * [Build attempts](#build-attempts)
 * [Prerequisites](#prerequisites)
 * How to

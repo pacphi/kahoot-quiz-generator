@@ -59,11 +59,6 @@ server:
   tomcat:
     max-swallow-size: -1
 
-kahoot:
-  client:
-    id: ${KAHOOT_CLIENT_ID}
-    secret: ${KAHOOT_CLIENT_SECRET}
-
 ---
 
 spring:

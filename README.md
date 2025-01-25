@@ -35,7 +35,7 @@ I got started with:
 
 * A Github [account](https://github.com/signup)
 * A Claude.ai Pro [plan](https://www.anthropic.com/pricing)
-* This Spring Initializr [configuration](https://start.spring.io/#!type=maven-project&language=java&platformVersion=3.4.1&packaging=jar&jvmVersion=21&groupId=me.pacphi&artifactId=kahoot-quiz-generator&name=Kahoot%20Quiz%20Generator&description=I%20create%20quizzes%20for%20you%20in%20Kahoot%20based%20on%20your%20prompt&packageName=me.pacphi.kahoot&dependencies=spring-ai-openai,web,configuration-processor,devtools,docker-compose)
+* This Spring Initializr [configuration](https://start.spring.io/#!type=maven-project&language=java&platformVersion=3.4.2&packaging=jar&jvmVersion=21&groupId=me.pacphi&artifactId=kahoot-quiz-generator&name=Kahoot%20Quiz%20Generator&description=I%20create%20quizzes%20for%20you%20in%20Kahoot%20based%20on%20your%20prompt&packageName=me.pacphi.kahoot&dependencies=spring-ai-openai,web,configuration-processor,devtools,docker-compose)
 * Kahoot credentials
 
 ## Prompt history

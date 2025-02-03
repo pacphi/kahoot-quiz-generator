@@ -51,7 +51,7 @@
 		<assertj.version>3.27.3</assertj.version>
 		<cfenv.version>3.3.0</cfenv.version>
 		<jackson-databind-nullable.version>0.2.6</jackson-databind-nullable.version>
-		<jakarta-validation.version>3.1.0</jakarta-validation.version>
+		<jakarta-validation.version>3.1.1</jakarta-validation.version>
 		<json-io.version>4.33.0</json-io.version>
 		<node.version>v23.4.0</node.version>
 		<npm.version>10.9.2</npm.version>

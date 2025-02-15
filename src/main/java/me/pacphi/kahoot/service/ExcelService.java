@@ -23,7 +23,7 @@ public class ExcelService {
     private static final Logger log = LoggerFactory.getLogger(ExcelService.class);
     private static final String TEMPLATE_PATH = "classpath:/templates/Kahoot-Quiz-Spreadsheet-Template.xlsx";
     private static final int STARTING_ROW = 8;
-    private static final int DEFAULT_TIME_LIMIT = 15;
+    private static final int DEFAULT_TIME_LIMIT = 20;
 
     private final ResourceLoader resourceLoader;
 
@@ -112,7 +112,7 @@ public class ExcelService {
             KahootQuestion.Choice choice = question.choices().get(i);
             row.getCell(2 + i, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).setCellValue(choice.answerText());
             if (choice.isCorrect()) {
-                row.getCell(7, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).setCellValue(2 + i);
+                row.getCell(7, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).setCellValue(1 + i);
             }
         }
      }

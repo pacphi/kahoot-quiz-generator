@@ -5,7 +5,7 @@ import { ArrowDownCircle, Loader2 } from "lucide-react";
 
 const QuizForm = () => {
   const [topic, setTopic] = useState('');
-  const [numQuestions, setNumQuestions] = useState(10);
+  const [numQuestions, setNumQuestions] = useState(20);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 

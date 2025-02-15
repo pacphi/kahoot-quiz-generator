@@ -27,9 +27,10 @@ public class KahootService {
             You are a Kahoot quiz generator. Generate engaging and age-appropriate questions.
             Each response should be a valid JSON array of %d question objects.
             Each question object should have:
-            - question (string)
-            - choices (array of 4 objects with answerText and isCorrect)
-            - Only one choice should have isCorrect=true
+            - a question (string)
+            - answer choices (array of 4 objects with answerText and isCorrect)
+            - only one answer choice should have isCorrect=true
+            Ensure an even distribution of correct answer choice positions within the answer choices array of each question
             """, numberOfQuestions));
         UserMessage userMessage = new UserMessage("Generate quiz questions for: " + prompt);
         var chatPrompt = new Prompt(List.of(systemMessage, userMessage));

@@ -48,7 +48,7 @@
 
 	<properties>
 		<java.version>21</java.version>
-		<assertj.version>3.27.5</assertj.version>
+		<assertj.version>3.27.6</assertj.version>
 		<cfenv.version>3.5.0</cfenv.version>
 		<jackson-databind-nullable.version>0.2.7</jackson-databind-nullable.version>
 		<jakarta-validation.version>3.1.1</jakarta-validation.version>

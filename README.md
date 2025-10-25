@@ -6,6 +6,7 @@ An AI-powered application that generates Kahoot quiz questions using LLMs (OpenA
 
 ## Quick Links
 
+- **[User Guide](docs/USER.md)** - How to generate quizzes and upload to Kahoot
 - [Backstory](docs/BACKSTORY.md) - Project origin, prompt history, and development journey
 - [Architecture](docs/ARCHITECTURE.md) - Technical design and technology stack
 - [Build Instructions](docs/BUILD.md) - How to clone and build the project
@@ -68,6 +69,7 @@ Open your browser to `http://localhost:8080`
 ## Documentation
 
 For detailed information, see:
+- **[USER.md](docs/USER.md)** - Complete user guide for generating quizzes and uploading to Kahoot
 - **[BACKSTORY.md](docs/BACKSTORY.md)** - How this project came to be, including all the prompts used with Claude AI and the iterative development process
 - **[ARCHITECTURE.md](docs/ARCHITECTURE.md)** - System design, technology choices, and Spring profiles
 - **[BUILD.md](docs/BUILD.md)** - Complete build instructions and troubleshooting

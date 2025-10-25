@@ -3,6 +3,7 @@
 ## Prerequisites
 
 Before running the application, you must:
+
 1. Complete the build process (see [BUILD.md](BUILD.md))
 2. Configure your LLM provider API key
 
@@ -21,6 +22,7 @@ mkdir config
 Create a file named `creds.yml` inside the `config` folder with your API key:
 
 #### For OpenAI
+
 ```yaml
 spring:
   ai:
@@ -29,6 +31,7 @@ spring:
 ```
 
 #### For Groq Cloud
+
 ```yaml
 spring:
   ai:
@@ -47,6 +50,7 @@ mvn spring-boot:run
 ```
 
 The application will start with:
+
 - Spring profile: `openai` and `dev`
 - Server port: `8080`
 - LLM provider: OpenAI
@@ -59,6 +63,7 @@ mvn spring-boot:run -Dspring-boot.run.arguments=--spring.profiles.active=groq-cl
 ```
 
 The application will start with:
+
 - Spring profile: `groq-cloud` and `dev`
 - Server port: `8080`
 - LLM provider: Groq Cloud
@@ -68,17 +73,20 @@ The application will start with:
 
 Once the application starts successfully, you'll see output like:
 
-```
+```text
 Started KahootQuizGeneratorApplication in X.XXX seconds
 ```
 
 ### Web Interface
+
 Open your favorite browser and visit:
-```
+
+```text
 http://localhost:8080
 ```
 
 You should see the Kahoot Quiz Generator interface where you can:
+
 1. Enter a topic or theme
 2. Specify the number of questions
 3. Generate and download quiz Excel files
@@ -86,6 +94,7 @@ You should see the Kahoot Quiz Generator interface where you can:
 ## Shutdown
 
 To stop the application:
+
 - Press `Ctrl+C` in the terminal
 
 ## Spring Profiles
@@ -101,12 +110,14 @@ To stop the application:
 ### Profile Configuration Location
 
 Profiles are configured in `src/main/resources/application.yml`:
+
 - The `default` profile automatically activates `openai` and `dev`
 - Override with command-line arguments using `-Dspring-boot.run.arguments`
 
 ## Environment Variables
 
 ### CHAT_MODEL
+
 Specifies the model to use with Groq Cloud:
 
 ```bash
@@ -118,6 +129,7 @@ export CHAT_MODEL=mixtral-8x7b-32768
 ```
 
 ### SPRING_CONFIG_IMPORT
+
 Alternative way to specify credentials file:
 
 ```bash
@@ -128,32 +140,41 @@ mvn spring-boot:run
 ## Troubleshooting
 
 ### Issue: API Key Not Found
+
 **Error:**
-```
+
+```text
 OpenAI API key must be set
 ```
 
 **Solution:**
+
 1. Verify `config/creds.yml` exists
 2. Check the API key is correctly formatted
 3. Ensure no extra spaces or quotes around the key
 
 ### Issue: Port Already in Use
+
 **Error:**
-```
+
+```text
 Port 8080 was already in use
 ```
 
 **Solution:**
+
 Either stop the process using port 8080, or change the port in `application.yml`:
+
 ```yaml
 server:
   port: 8081
 ```
 
 ### Issue: Groq Cloud Model Not Found
+
 **Error:**
-```
+
+```text
 Model not found
 ```
 
@@ -169,6 +190,7 @@ java -jar target/kahoot-quiz-generator-*.jar
 ```
 
 With Groq Cloud:
+
 ```bash
 export CHAT_MODEL=llama-3.3-70b-versatile
 java -jar target/kahoot-quiz-generator-*.jar --spring.profiles.active=groq-cloud,dev

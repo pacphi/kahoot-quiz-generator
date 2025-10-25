@@ -3,6 +3,7 @@
 ## Technology Stack
 
 ### Backend
+
 - **Java 21** - Modern Java LTS release
 - **Spring Boot 3.x** - Application framework
 - **Spring AI** - LLM integration with support for multiple providers
@@ -10,12 +11,14 @@
 - **Maven 3.9.9** - Build and dependency management
 
 ### Frontend
+
 - **ReactJS** - UI framework
 - **Vite** - Build tool and development server
 - **Tailwind CSS** - Utility-first CSS framework
 - **PostCSS** - CSS processing
 
 ### LLM Providers
+
 - **OpenAI** - Primary LLM provider
 - **Groq Cloud** - Alternative LLM provider (llama-3.3-70b-versatile)
 
@@ -23,7 +26,7 @@
 
 The frontend is built with ReactJS and managed through the `frontend-maven-plugin` for seamless integration with the Maven build process.
 
-```
+```text
 src/main/frontend/
 ├── index.html              # Entry HTML file
 ├── package.json            # NPM dependencies
@@ -45,7 +48,7 @@ src/main/frontend/
 
 The backend follows a clean Spring Boot architecture with service-oriented design:
 
-```
+```text
 src/main/java/me/pacphi/kahoot/
 ├── controller/             # REST API endpoints
 ├── service/
@@ -58,6 +61,7 @@ src/main/java/me/pacphi/kahoot/
 ### Key Components
 
 #### KahootService
+
 The core service responsible for:
 - Generating quiz questions using Spring AI's ChatClient
 - Interacting with LLM providers (OpenAI/Groq)
@@ -65,6 +69,7 @@ The core service responsible for:
 - Validating question structure (4 choices, 1 correct answer)
 
 #### KahootQuestion Record
+
 ```java
 public record KahootQuestion(
     String question,
@@ -87,21 +92,25 @@ Validates:
 The application uses Spring profiles for flexible configuration:
 
 ### Default Profile
+
 - Automatically activates `openai` and `dev` profiles
 - Configured in `src/main/resources/application.yml`
 
 ### Available Profiles
 
 #### `openai`
+
 - Uses OpenAI as the LLM provider
 - Requires `spring.ai.openai.api-key` in `config/creds.yml`
 
 #### `groq-cloud`
+
 - Uses Groq Cloud as the LLM provider
 - Requires `spring.ai.groq.api-key` in `config/creds.yml`
 - Requires `CHAT_MODEL` environment variable (e.g., `llama-3.3-70b-versatile`)
 
 #### `dev`
+
 - Development-specific configurations
 - Enhanced logging and debugging
 

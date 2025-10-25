@@ -7,10 +7,12 @@ import java.util.List;
  *
  * @param question The text of the question
  * @param choices  List of possible answers, where exactly one must be correct
+ * @param timeLimit Time limit in seconds (5-240)
  */
 public record KahootQuestion(
         String question,
-        List<Choice> choices) {
+        List<Choice> choices,
+        int timeLimit) {
     /**
      * Represents a single answer choice for a Kahoot question.
      *
@@ -36,6 +38,7 @@ public record KahootQuestion(
      * - Question text is not empty
      * - Has exactly 4 choices
      * - Exactly one choice is marked as correct
+     * - Time limit is within valid range (5-240 seconds)
      */
     public KahootQuestion
 
@@ -54,6 +57,10 @@ public record KahootQuestion(
 
         if (correctCount != 1) {
             throw new IllegalArgumentException("Must have exactly one correct answer");
+        }
+
+        if (timeLimit < 5 || timeLimit > 240) {
+            throw new IllegalArgumentException("Time limit must be between 5 and 240 seconds");
         }
     }
 }

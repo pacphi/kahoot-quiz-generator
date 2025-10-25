@@ -2,14 +2,20 @@
 
 ## Introduction
 
-Welcome to the Kahoot Quiz Generator! This application helps educators, trainers, and quiz creators automatically generate engaging multiple-choice quizzes using AI. Simply provide a topic and the number of questions you want, and the application will create a ready-to-upload Excel file for [Kahoot](https://kahoot.com/).
+Welcome to the Kahoot Quiz Generator! This application helps educators, trainers, and quiz creators create engaging multiple-choice quizzes for [Kahoot](https://kahoot.com/). The application offers **two powerful modes**:
+
+1. **🤖 AI Generation**: Automatically generate quiz questions using AI based on any topic
+2. **📄 CSV Upload**: Convert your existing questions from CSV format into Kahoot-ready quizzes
+
+Both modes produce ready-to-upload Excel files that conform to Kahoot's official quiz template format.
 
 ## Who Is This For?
 
 - **Educators** creating classroom quizzes
 - **Corporate trainers** developing training assessments
 - **Content creators** building engaging educational content
-- **Anyone** who wants to quickly create Kahoot quizzes without manual question writing
+- **Anyone with existing quiz questions** who wants to convert them to Kahoot format
+- **Anyone** who wants to quickly create Kahoot quizzes without manual formatting
 
 ## Prerequisites
 
@@ -28,9 +34,23 @@ Open your web browser and navigate to:
 http://localhost:8080
 ```
 
-You should see the "Generate Kahoot Quiz" interface.
+You should see the Kahoot Quiz Generator with two tabs at the top:
+- **AI Generation** - Generate questions from a topic using AI
+- **CSV Upload** - Convert your existing CSV quiz file to Kahoot format
 
-### Step 2: Enter Your Quiz Topic
+**[SCREENSHOT PLACEHOLDER: Main interface showing both tabs]**
+
+Choose the mode that fits your needs and follow the instructions below.
+
+---
+
+## Mode 1: AI Generation
+
+Use this mode when you want the AI to create quiz questions for you based on a topic.
+
+**[SCREENSHOT PLACEHOLDER: AI Generation tab interface]**
+
+### Step 1: Enter Your Quiz Topic
 
 In the **Quiz Topic** field, provide a clear description or essential keywords for your quiz. The AI will use this to generate relevant questions.
 
@@ -47,7 +67,7 @@ In the **Quiz Topic** field, provide a clear description or essential keywords f
 - Use descriptive phrases rather than single words
 - Mention the difficulty level if needed (e.g., "Introduction to Python for beginners")
 
-### Step 3: Choose Number of Questions
+### Step 2: Choose Number of Questions
 
 Select how many questions you want (between 1 and 20).
 
@@ -56,7 +76,7 @@ Select how many questions you want (between 1 and 20).
 - **Standard quiz**: 10-15 questions
 - **Comprehensive assessment**: 15-20 questions
 
-### Step 4: Generate Your Quiz
+### Step 3: Generate Your Quiz
 
 Click the **Generate Quiz** button. The application will:
 1. Send your topic to the AI
@@ -65,6 +85,113 @@ Click the **Generate Quiz** button. The application will:
 4. Automatically download the file to your computer
 
 The file will be named `kahoot-quiz.xlsx`.
+
+---
+
+## Mode 2: CSV Upload
+
+Use this mode when you already have quiz questions in a spreadsheet or CSV file.
+
+**[SCREENSHOT PLACEHOLDER: CSV Upload tab interface]**
+
+### Step 1: Prepare Your CSV File
+
+Your CSV file must include the following columns (column names are case-insensitive):
+
+**Required Columns:**
+- **Question** (or "q", "question_text") - The question text
+- **Option 1** (or "option1", "answer 1", "choice 1", "a") - First answer choice
+- **Option 2** (or "option2", "answer 2", "choice 2", "b") - Second answer choice
+- **Option 3** (or "option3", "answer 3", "choice 3", "c") - Third answer choice
+- **Option 4** (or "option4", "answer 4", "choice 4", "d") - Fourth answer choice
+- **Correct Answer** (or "correct", "answer", "solution") - The text of the correct answer (must exactly match one of the four options)
+
+**Optional Column:**
+- **Time Limit** (or "time", "seconds", "duration") - Time limit in seconds (5-240). If not provided, defaults to 20 seconds.
+
+**Example CSV Format:**
+```csv
+Question,Option 1,Option 2,Option 3,Option 4,Correct Answer,Time Limit
+What is 2+2?,3,4,5,6,4,20
+What is the capital of France?,London,Paris,Berlin,Madrid,Paris,30
+Who wrote Romeo and Juliet?,Charles Dickens,William Shakespeare,Jane Austen,Mark Twain,William Shakespeare,25
+```
+
+**Important CSV Requirements:**
+- ✅ Maximum 100 questions per file
+- ✅ Maximum file size: 5MB
+- ✅ File must have `.csv` extension
+- ✅ Correct answer must **exactly match** one of the four options (case-sensitive)
+- ✅ All questions must have exactly 4 answer options
+- ✅ No empty questions or answer options
+
+**[SCREENSHOT PLACEHOLDER: Sample CSV file in Excel/spreadsheet]**
+
+### Step 2: Upload Your CSV File
+
+1. Click the **"Choose File"** or **"Browse"** button
+2. Select your CSV file from your computer
+3. Click the **"Upload CSV"** button
+
+The application will:
+- Parse your CSV file
+- Detect column names (even with different capitalization)
+- Validate all questions and answers
+- Display a preview with any errors highlighted
+
+**[SCREENSHOT PLACEHOLDER: File upload interface with file selected]**
+
+### Step 3: Review the Preview
+
+After uploading, you'll see a table preview of your questions:
+
+**[SCREENSHOT PLACEHOLDER: CSV preview table showing questions]**
+
+The preview shows:
+- ✅ **Green indicators** for valid questions
+- ❌ **Red highlighting** for rows with errors
+- 📊 **Summary statistics** (e.g., "18 of 20 questions valid")
+- 📝 **Detailed error messages** explaining what needs to be fixed
+
+**Common Validation Errors:**
+- "Correct answer must exactly match one of the four options" - Check spelling and capitalization
+- "Option X is empty" - One or more answer choices are missing
+- "Time limit must be between 5 and 240 seconds" - Invalid time limit value
+- "Question text is empty" - Missing question text
+
+If there are errors, fix your CSV file and upload it again.
+
+**[SCREENSHOT PLACEHOLDER: Preview showing validation errors highlighted in red]**
+
+### Step 4: Configure Conversion Options
+
+Once your CSV is valid (no errors), you'll see conversion options:
+
+**[SCREENSHOT PLACEHOLDER: Conversion options panel]**
+
+**Available Options:**
+
+- **☑️ Shuffle question order** (default: enabled)
+  - Randomizes the order of questions in the output
+  - Useful for creating multiple quiz versions
+
+- **☑️ Randomize answer positions** (default: enabled)
+  - Shuffles the position of the correct answer for each question
+  - Prevents answer pattern memorization
+
+- **⏱️ Default time limit** (default: 20 seconds)
+  - Applied to questions that don't have a time limit in the CSV
+  - Valid range: 5-240 seconds
+
+### Step 5: Generate Kahoot Quiz
+
+1. Configure your shuffling and time limit preferences
+2. Click the **"Generate Kahoot Quiz"** button
+3. The Excel file will automatically download
+
+The file will be named `kahoot-quiz-from-csv.xlsx`.
+
+---
 
 ## Understanding Your Output
 
@@ -88,7 +215,15 @@ The Excel file follows [Kahoot's official quiz spreadsheet template format](http
 - Column G: Time limit (in seconds)
 - Column H: Correct answer number (1, 2, 3, or 4)
 
+**[SCREENSHOT PLACEHOLDER: Successfully generated quiz showing download]**
+
+---
+
 ## Uploading to Kahoot
+
+Once you have your Excel file (from either AI Generation or CSV Upload), follow these steps to upload it to Kahoot.
+
+**[SCREENSHOT PLACEHOLDER: Kahoot website homepage]**
 
 ### Step 1: Log into Kahoot
 

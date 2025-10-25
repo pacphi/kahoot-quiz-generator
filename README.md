@@ -1,6 +1,6 @@
 # Kahoot Quiz Generator
 
-[![GA](https://img.shields.io/badge/Release-Alpha-darkred)](https://img.shields.io/badge/Release-Alpha-darkred) ![Github Action CI Workflow Status](https://github.com/pacphi/kahoot-quiz-generator/actions/workflows/ci.yml/badge.svg) [![Known Vulnerabilities](https://snyk.io/test/github/pacphi/kahoot-quiz-generator/badge.svg?style=plastic)](https://snyk.io/test/github/pacphi/kahoot-quiz-generator)
+[![GA](https://img.shields.io/badge/Release-GA-darkgeen)](https://img.shields.io/badge/Release-Alpha-darkred) ![Github Action CI Workflow Status](https://github.com/pacphi/kahoot-quiz-generator/actions/workflows/ci.yml/badge.svg) [![Known Vulnerabilities](https://snyk.io/test/github/pacphi/kahoot-quiz-generator/badge.svg?style=plastic)](https://snyk.io/test/github/pacphi/kahoot-quiz-generator)
 
 An AI-powered application that generates Kahoot quiz questions using LLMs (OpenAI or Groq Cloud). Create themed quizzes with multiple-choice questions and export them as Excel files ready for upload to [Kahoot](https://kahoot.com/).
 

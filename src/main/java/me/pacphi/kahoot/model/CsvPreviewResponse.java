@@ -13,15 +13,15 @@ import java.util.Map;
  * @param questions        List of successfully parsed Kahoot questions
  * @param validationErrors List of validation errors encountered during parsing
  * @param columnMapping    Mapping from detected CSV column names to standard field names
- * @param totalRows        Total number of data rows in the CSV (excluding header)
- * @param validRows        Number of rows that were successfully parsed without errors
+ * @param totalQuestions   Total number of data rows in the CSV (excluding header)
+ * @param validQuestions   Number of rows that were successfully parsed without errors
  */
 public record CsvPreviewResponse(
     List<KahootQuestion> questions,
     List<ValidationError> validationErrors,
     Map<String, String> columnMapping,
-    int totalRows,
-    int validRows) {
+    int totalQuestions,
+    int validQuestions) {
 
   /**
    * Validates that the response data is consistent and non-null.
@@ -39,16 +39,16 @@ public record CsvPreviewResponse(
       throw new IllegalArgumentException("Column mapping cannot be null");
     }
 
-    if (totalRows < 0) {
-      throw new IllegalArgumentException("Total rows cannot be negative");
+    if (totalQuestions < 0) {
+      throw new IllegalArgumentException("Total questions cannot be negative");
     }
 
-    if (validRows < 0) {
-      throw new IllegalArgumentException("Valid rows cannot be negative");
+    if (validQuestions < 0) {
+      throw new IllegalArgumentException("Valid questions cannot be negative");
     }
 
-    if (validRows > totalRows) {
-      throw new IllegalArgumentException("Valid rows cannot exceed total rows");
+    if (validQuestions > totalQuestions) {
+      throw new IllegalArgumentException("Valid questions cannot exceed total questions");
     }
   }
 
@@ -62,11 +62,11 @@ public record CsvPreviewResponse(
   }
 
   /**
-   * Checks if all rows in the CSV were successfully parsed.
+   * Checks if all questions in the CSV were successfully parsed.
    *
-   * @return true if all rows are valid, false otherwise
+   * @return true if all questions are valid, false otherwise
    */
   public boolean isFullyValid() {
-    return validRows == totalRows && !hasErrors();
+    return validQuestions == totalQuestions && !hasErrors();
   }
 }

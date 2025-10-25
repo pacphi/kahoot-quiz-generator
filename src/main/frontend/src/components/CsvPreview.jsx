@@ -1,21 +1,45 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
 import { Alert, AlertDescription } from './ui/alert';
 import ConversionOptions from './ConversionOptions';
-import { CheckCircle2, XCircle, AlertCircle } from 'lucide-react';
+import { CheckCircle2, XCircle, AlertCircle, ChevronRight, ChevronDown, Info } from 'lucide-react';
 
 const CsvPreview = ({ previewData }) => {
+  const [expandedRow, setExpandedRow] = useState(null);
+
   if (!previewData) return null;
 
-  const { questions = [], validQuestions = 0, totalQuestions = 0, errors = [] } = previewData;
+  const { questions = [], validQuestions = 0, totalQuestions = 0, errors = [], columnMapping = {} } = previewData;
   const hasErrors = validQuestions < totalQuestions;
   const allValid = validQuestions === totalQuestions && totalQuestions > 0;
 
-  const getRowClassName = (question) => {
-    if (question.errors && question.errors.length > 0) {
-      return 'bg-red-50';
+  // Helper functions to extract data from question object
+  const getOption = (question, index) => {
+    if (!question.choices || !question.choices[index]) return null;
+    return question.choices[index].answerText;
+  };
+
+  const getCorrectAnswer = (question) => {
+    if (!question.choices) return null;
+    const correctChoice = question.choices.find(c => c.isCorrect);
+    return correctChoice ? correctChoice.answerText : null;
+  };
+
+  const getRowClassName = (question, idx) => {
+    const isExpanded = expandedRow === idx;
+    const hasError = question.errors && question.errors.length > 0;
+
+    if (hasError) {
+      return 'bg-red-50 cursor-pointer';
     }
-    return 'hover:bg-gray-50';
+    if (isExpanded) {
+      return 'bg-blue-50 cursor-pointer';
+    }
+    return 'hover:bg-gray-50 cursor-pointer';
+  };
+
+  const toggleRow = (idx) => {
+    setExpandedRow(expandedRow === idx ? null : idx);
   };
 
   return (
@@ -43,6 +67,25 @@ const CsvPreview = ({ previewData }) => {
           </CardTitle>
         </CardHeader>
         <CardContent>
+          {Object.keys(columnMapping).length > 0 && (
+            <Alert className="mb-4 bg-blue-50 border-blue-200">
+              <Info className="h-4 w-4 text-blue-600" />
+              <AlertDescription>
+                <div className="text-sm text-blue-900">
+                  <span className="font-semibold">Detected Columns: </span>
+                  {Object.entries(columnMapping).map(([key, value], idx, arr) => (
+                    <span key={key}>
+                      <span className="font-medium">{key}</span>
+                      <span className="mx-1">→</span>
+                      <span className="italic">'{value}'</span>
+                      {idx < arr.length - 1 && <span className="mx-2">|</span>}
+                    </span>
+                  ))}
+                </div>
+              </AlertDescription>
+            </Alert>
+          )}
+
           {errors.length > 0 && (
             <Alert variant="destructive" className="mb-4">
               <AlertDescription>
@@ -72,29 +115,47 @@ const CsvPreview = ({ previewData }) => {
                   </tr>
                 </thead>
                 <tbody>
-                  {questions.map((question, idx) => (
+                  {questions.map((question, idx) => {
+                    const isExpanded = expandedRow === idx;
+                    const option1 = getOption(question, 0);
+                    const option2 = getOption(question, 1);
+                    const option3 = getOption(question, 2);
+                    const option4 = getOption(question, 3);
+                    const correctAnswer = getCorrectAnswer(question);
+
+                    return (
                     <React.Fragment key={idx}>
-                      <tr className={`border-b border-gray-200 ${getRowClassName(question)}`}>
+                      <tr
+                        className={`border-b border-gray-200 ${getRowClassName(question, idx)}`}
+                        onClick={() => toggleRow(idx)}
+                      >
                         <td className="px-4 py-3 text-sm font-medium text-gray-900">
-                          {idx + 1}
+                          <div className="flex items-center gap-2">
+                            {isExpanded ? (
+                              <ChevronDown className="w-4 h-4 text-blue-600" />
+                            ) : (
+                              <ChevronRight className="w-4 h-4 text-gray-400" />
+                            )}
+                            {idx + 1}
+                          </div>
                         </td>
-                        <td className="px-4 py-3 text-sm text-gray-900 max-w-xs truncate" title={question.question}>
+                        <td className={`px-4 py-3 text-sm text-gray-900 ${isExpanded ? 'whitespace-pre-wrap break-words' : 'max-w-xs truncate'}`} title={!isExpanded ? question.question : undefined}>
                           {question.question || <span className="text-gray-400 italic">Empty</span>}
                         </td>
-                        <td className="px-4 py-3 text-sm text-gray-700">
-                          {question.option1 || <span className="text-gray-400 italic">Empty</span>}
+                        <td className={`px-4 py-3 text-sm text-gray-700 ${isExpanded ? 'whitespace-pre-wrap break-words' : 'max-w-[150px] truncate'}`} title={!isExpanded ? option1 : undefined}>
+                          {option1 || <span className="text-gray-400 italic">Empty</span>}
                         </td>
-                        <td className="px-4 py-3 text-sm text-gray-700">
-                          {question.option2 || <span className="text-gray-400 italic">Empty</span>}
+                        <td className={`px-4 py-3 text-sm text-gray-700 ${isExpanded ? 'whitespace-pre-wrap break-words' : 'max-w-[150px] truncate'}`} title={!isExpanded ? option2 : undefined}>
+                          {option2 || <span className="text-gray-400 italic">Empty</span>}
                         </td>
-                        <td className="px-4 py-3 text-sm text-gray-700">
-                          {question.option3 || <span className="text-gray-400 italic">Empty</span>}
+                        <td className={`px-4 py-3 text-sm text-gray-700 ${isExpanded ? 'whitespace-pre-wrap break-words' : 'max-w-[150px] truncate'}`} title={!isExpanded ? option3 : undefined}>
+                          {option3 || <span className="text-gray-400 italic">Empty</span>}
                         </td>
-                        <td className="px-4 py-3 text-sm text-gray-700">
-                          {question.option4 || <span className="text-gray-400 italic">Empty</span>}
+                        <td className={`px-4 py-3 text-sm text-gray-700 ${isExpanded ? 'whitespace-pre-wrap break-words' : 'max-w-[150px] truncate'}`} title={!isExpanded ? option4 : undefined}>
+                          {option4 || <span className="text-gray-400 italic">Empty</span>}
                         </td>
-                        <td className="px-4 py-3 text-sm font-medium text-gray-900">
-                          {question.correct || <span className="text-gray-400 italic">-</span>}
+                        <td className={`px-4 py-3 text-sm font-medium text-gray-900 ${isExpanded ? 'whitespace-pre-wrap break-words' : 'max-w-[150px] truncate'}`} title={!isExpanded ? correctAnswer : undefined}>
+                          {correctAnswer || <span className="text-gray-400 italic">-</span>}
                         </td>
                         <td className="px-4 py-3 text-sm text-gray-700">
                           {question.timeLimit || <span className="text-gray-400 italic">-</span>}
@@ -118,7 +179,8 @@ const CsvPreview = ({ previewData }) => {
                         </tr>
                       )}
                     </React.Fragment>
-                  ))}
+                    );
+                  })}
                 </tbody>
               </table>
             </div>

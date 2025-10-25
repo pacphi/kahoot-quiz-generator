@@ -68,15 +68,11 @@ const ConversionOptions = ({ questions, onConvert }) => {
       const conversionRequest = {
         questions: questions.map(q => ({
           question: q.question,
-          option1: q.option1,
-          option2: q.option2,
-          option3: q.option3,
-          option4: q.option4,
-          correct: q.correct,
+          choices: q.choices,
           timeLimit: q.timeLimit || options.defaultTimeLimit,
         })),
         shuffleQuestions: options.shuffleQuestions,
-        randomizeAnswers: options.randomizeAnswers,
+        shuffleAnswers: options.randomizeAnswers,
         defaultTimeLimit: options.defaultTimeLimit,
       };
 

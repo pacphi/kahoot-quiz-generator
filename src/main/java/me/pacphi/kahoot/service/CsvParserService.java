@@ -57,8 +57,8 @@ public class CsvParserService {
     public CsvPreviewResponse parseCsv(InputStream csvStream) throws IOException {
         List<KahootQuestion> questions = new ArrayList<>();
         List<ValidationError> validationErrors = new ArrayList<>();
-        int totalRows = 0;
-        int validRows = 0;
+        int totalQuestions = 0;
+        int validQuestions = 0;
 
         try (Reader reader = new InputStreamReader(csvStream);
              CSVReader csvReader = new CSVReader(reader)) {
@@ -84,9 +84,9 @@ public class CsvParserService {
             // Parse data rows
             for (int i = 1; i < allRows.size(); i++) {
                 String[] row = allRows.get(i);
-                totalRows++;
+                totalQuestions++;
 
-                if (totalRows > MAX_QUESTIONS) {
+                if (totalQuestions > MAX_QUESTIONS) {
                     validationErrors.add(new ValidationError(ErrorType.INVALID_ANSWER, i + 1, null,
                         String.format("Maximum %d questions allowed. Remaining rows will be ignored.", MAX_QUESTIONS)));
                     break;
@@ -99,7 +99,7 @@ public class CsvParserService {
                     try {
                         KahootQuestion question = parseQuestion(row, columnMap);
                         questions.add(question);
-                        validRows++;
+                        validQuestions++;
                     } catch (Exception e) {
                         log.warn("Failed to parse row {}: {}", i + 1, e.getMessage());
                         validationErrors.add(new ValidationError(ErrorType.INVALID_ANSWER, i + 1, null,
@@ -108,10 +108,10 @@ public class CsvParserService {
                 }
             }
 
-            log.info("Parsed CSV: {} total rows, {} valid questions, {} errors",
-                totalRows, validRows, validationErrors.size());
+            log.info("Parsed CSV: {} total questions, {} valid questions, {} errors",
+                totalQuestions, validQuestions, validationErrors.size());
 
-            return new CsvPreviewResponse(questions, validationErrors, columnMapping, totalRows, validRows);
+            return new CsvPreviewResponse(questions, validationErrors, columnMapping, totalQuestions, validQuestions);
 
         } catch (CsvException e) {
             throw new IOException("Failed to parse CSV file", e);

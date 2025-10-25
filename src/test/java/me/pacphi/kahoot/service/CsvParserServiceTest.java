@@ -100,8 +100,8 @@ class CsvParserServiceTest {
     assertThat(response).isNotNull();
     assertThat(response.questions()).hasSize(2);
     assertThat(response.validationErrors()).isEmpty();
-    assertThat(response.totalRows()).isEqualTo(2);
-    assertThat(response.validRows()).isEqualTo(2);
+    assertThat(response.totalQuestions()).isEqualTo(2);
+    assertThat(response.validQuestions()).isEqualTo(2);
 
     // Verify first question
     KahootQuestion firstQuestion = response.questions().get(0);
@@ -132,7 +132,7 @@ class CsvParserServiceTest {
     assertThat(response).isNotNull();
     assertThat(response.questions()).hasSize(1);
     assertThat(response.validationErrors()).isEmpty();
-    assertThat(response.validRows()).isEqualTo(1);
+    assertThat(response.validQuestions()).isEqualTo(1);
 
     KahootQuestion question = response.questions().get(0);
     assertThat(question.question()).isEqualTo("What is 2+2?");
@@ -268,8 +268,8 @@ class CsvParserServiceTest {
     assertThat(response.validationErrors()).isNotEmpty();
     assertThat(response.validationErrors())
         .anyMatch(error -> error.message().contains("CSV file is empty"));
-    assertThat(response.totalRows()).isEqualTo(0);
-    assertThat(response.validRows()).isEqualTo(0);
+    assertThat(response.totalQuestions()).isEqualTo(0);
+    assertThat(response.validQuestions()).isEqualTo(0);
   }
 
   @Test
@@ -288,7 +288,7 @@ class CsvParserServiceTest {
     // Assert
     assertThat(response).isNotNull();
     assertThat(response.questions()).hasSize(100);
-    assertThat(response.totalRows()).isEqualTo(101); // Service increments totalRows before checking max
+    assertThat(response.totalQuestions()).isEqualTo(101); // Service increments totalQuestions before checking max
     assertThat(response.validationErrors()).isNotEmpty();
     assertThat(response.validationErrors())
         .anyMatch(error -> error.message().contains("Maximum 100 questions allowed"));
@@ -325,8 +325,8 @@ class CsvParserServiceTest {
     // Assert
     assertThat(response).isNotNull();
     assertThat(response.questions()).isEmpty();
-    assertThat(response.totalRows()).isEqualTo(0);
-    assertThat(response.validRows()).isEqualTo(0);
+    assertThat(response.totalQuestions()).isEqualTo(0);
+    assertThat(response.validQuestions()).isEqualTo(0);
     assertThat(response.validationErrors()).isEmpty();
   }
 

@@ -108,8 +108,8 @@ public class KahootQuizGeneratorController {
 
             // Parse CSV file
             CsvPreviewResponse response = csvParserService.parseCsv(file.getInputStream());
-            log.info("CSV parsed successfully: {} questions, {} errors",
-                    response.validRows(), response.validationErrors().size());
+            log.info("CSV parsed successfully: {} valid questions, {} errors",
+                    response.validQuestions(), response.validationErrors().size());
 
             return ResponseEntity.ok(response);
 

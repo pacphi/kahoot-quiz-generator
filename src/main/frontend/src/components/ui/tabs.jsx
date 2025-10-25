@@ -15,14 +15,14 @@ export const Tabs = ({ defaultValue, value: controlledValue, onValueChange, clas
     <div className={`w-full ${className || ''}`} data-value={value}>
       {React.Children.map(children, child =>
         React.isValidElement(child)
-          ? React.cloneElement(child, { value, onValueChange: handleValueChange })
+          ? React.cloneElement(child, { activeValue: value, onValueChange: handleValueChange })
           : child
       )}
     </div>
   );
 };
 
-export const TabsList = ({ className, children, value, onValueChange }) => {
+export const TabsList = ({ className, children, activeValue, onValueChange }) => {
   const listRef = useRef(null);
 
   const handleKeyDown = (e) => {
@@ -56,19 +56,19 @@ export const TabsList = ({ className, children, value, onValueChange }) => {
       ref={listRef}
       role="tablist"
       onKeyDown={handleKeyDown}
-      className={`inline-flex h-10 items-center justify-start rounded-md bg-gray-100 p-1 text-gray-500 w-full ${className || ''}`}
+      className={`inline-flex h-12 items-center justify-start rounded-lg bg-gray-100 p-1 text-gray-500 w-full ${className || ''}`}
     >
       {React.Children.map(children, child =>
         React.isValidElement(child)
-          ? React.cloneElement(child, { value, onValueChange })
+          ? React.cloneElement(child, { activeValue, onValueChange })
           : child
       )}
     </div>
   );
 };
 
-export const TabsTrigger = ({ value: tabValue, children, value: currentValue, onValueChange, className }) => {
-  const isActive = currentValue === tabValue;
+export const TabsTrigger = ({ value: tabValue, children, activeValue, onValueChange, className }) => {
+  const isActive = activeValue === tabValue;
 
   const handleClick = () => {
     onValueChange?.(tabValue);
@@ -82,13 +82,13 @@ export const TabsTrigger = ({ value: tabValue, children, value: currentValue, on
       data-state={isActive ? 'active' : 'inactive'}
       onClick={handleClick}
       className={`
-        inline-flex items-center justify-center whitespace-nowrap rounded-sm px-3 py-1.5
-        text-sm font-medium ring-offset-white transition-all
+        inline-flex items-center justify-center whitespace-nowrap rounded-md px-4 py-2
+        text-sm font-medium ring-offset-white transition-all duration-200
         focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2
         disabled:pointer-events-none disabled:opacity-50
         ${isActive
-          ? 'bg-white text-gray-900 shadow-sm font-semibold border-b-2 border-blue-500'
-          : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
+          ? 'bg-white text-blue-600 shadow-md font-bold border-b-4 border-blue-500 scale-105'
+          : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900 hover:scale-102'
         }
         ${className || ''}
       `}
@@ -98,8 +98,8 @@ export const TabsTrigger = ({ value: tabValue, children, value: currentValue, on
   );
 };
 
-export const TabsContent = ({ value: tabValue, children, value: currentValue, className }) => {
-  const isActive = currentValue === tabValue;
+export const TabsContent = ({ value: tabValue, children, activeValue, className }) => {
+  const isActive = activeValue === tabValue;
 
   if (!isActive) return null;
 

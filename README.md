@@ -18,6 +18,7 @@ An AI-powered application that generates Kahoot quiz questions using LLMs (OpenA
 ## What It Does
 
 This application:
+
 - Accepts a topic/theme and number of questions as input
 - Generates quiz questions using AI (OpenAI or Groq Cloud)
 - Creates 4 multiple-choice answers per question (one correct answer)
@@ -27,23 +28,28 @@ This application:
 ## Quick Start
 
 ### Prerequisites
+
 - Java SDK 21
 - Maven 3.9.9
 - OpenAI or Groq Cloud API key
 
 ### Clone
+
 ```bash
 git clone https://github.com/pacphi/kahoot-quiz-generator
 cd kahoot-quiz-generator
 ```
 
 ### Build
+
 ```bash
 mvn clean package
 ```
 
 ### Configure
+
 Create `config/creds.yml`:
+
 ```yaml
 spring:
   ai:
@@ -52,11 +58,13 @@ spring:
 ```
 
 ### Run
+
 ```bash
 mvn spring-boot:run
 ```
 
 ### Use
+
 Open your browser to `http://localhost:8080`
 
 ## Tech Stack
@@ -69,6 +77,7 @@ Open your browser to `http://localhost:8080`
 ## Documentation
 
 For detailed information, see:
+
 - **[USER.md](docs/USER.md)** - Complete user guide for generating quizzes and uploading to Kahoot
 - **[BACKSTORY.md](docs/BACKSTORY.md)** - How this project came to be, including all the prompts used with Claude AI and the iterative development process
 - **[ARCHITECTURE.md](docs/ARCHITECTURE.md)** - System design, technology choices, and Spring profiles

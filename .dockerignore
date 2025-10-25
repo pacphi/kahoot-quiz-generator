@@ -1,0 +1,46 @@
+# Maven
+target/
+.mvn/wrapper/maven-wrapper.jar
+
+# Local config
+config/
+*.log
+
+# IDE
+.idea/
+.vscode/
+*.iml
+.classpath
+.project
+.settings/
+
+# Git
+.git/
+.gitignore
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Frontend build artifacts (already in JAR)
+src/main/frontend/node_modules/
+src/main/frontend/dist/
+
+# Documentation
+*.md
+docs/
+
+# CI/CD
+.github/
+
+# Claude Code
+.claude/
+
+# Claude Flow
+.claude-flow/
+.hive-mind/
+.swarm/
+coordination
+memory
+.mcp.json
+claude-flow

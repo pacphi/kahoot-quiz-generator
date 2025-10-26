@@ -22,7 +22,7 @@ This application:
 - Accepts a topic/theme and number of questions as input
 - Generates quiz questions using AI (OpenAI or Groq Cloud)
 - Creates 4 multiple-choice answers per question (one correct answer)
-- Exports results as an Excel (.xlsx) file conforming to [Kahoot's Quiz template](https://kahoot.com/library/quiz-spreadsheet-template/)
+- Exports results as an Excel (.xlsx) file conforming to [Kahoot's Quiz template](https://kahoot.com/files/2019/08/Kahoot-Quiz-Spreadsheet-Template.xlsx)
 - Provides a clean ReactJS interface for easy quiz generation
 
 ## Quick Start

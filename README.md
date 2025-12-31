@@ -1,6 +1,6 @@
 # Kahoot Quiz Generator
 
-[![GA](https://img.shields.io/badge/Release-GA-darkgeen)](https://img.shields.io/badge/Release-Alpha-darkred) ![Github Action CI Workflow Status](https://github.com/pacphi/kahoot-quiz-generator/actions/workflows/ci.yml/badge.svg) [![Known Vulnerabilities](https://snyk.io/test/github/pacphi/kahoot-quiz-generator/badge.svg?style=plastic)](https://snyk.io/test/github/pacphi/kahoot-quiz-generator)
+[![GA](https://img.shields.io/badge/Release-GA-darkgreen)](https://img.shields.io/badge/Release-GA-darkgreen) [![Demo](https://img.shields.io/badge/Demo-Live-blue)](https://kahoot-quiz-gen.fly.dev) ![Github Action CI Workflow Status](https://github.com/pacphi/kahoot-quiz-generator/actions/workflows/ci.yml/badge.svg) [![Known Vulnerabilities](https://snyk.io/test/github/pacphi/kahoot-quiz-generator/badge.svg?style=plastic)](https://snyk.io/test/github/pacphi/kahoot-quiz-generator)
 
 An AI-powered application that generates Kahoot quiz questions using LLMs (OpenAI or Groq Cloud). Create themed quizzes with multiple-choice questions and export them as Excel files ready for upload to [Kahoot](https://kahoot.com/).
 
@@ -13,7 +13,9 @@ An AI-powered application that generates Kahoot quiz questions using LLMs (OpenA
 - [Run Instructions](docs/RUN.md) - How to configure and run the application
 - [Deployment](docs/DEPLOY.md) - Deploy to Fly.io with scale-to-zero configuration
 - [CI/CD](docs/CI.md) - Continuous integration and security scanning
-- [Brief Demonstration](https://github.com/pacphi/kahoot-quiz-generator/raw/refs/heads/main/kahoot-quiz-generator.mp4)
+- [Historical](docs/HISTORICAL.md) - Migration notes and version upgrade history
+- [Brief video demonstration](https://github.com/pacphi/kahoot-quiz-generator/raw/refs/heads/main/kahoot-quiz-generator.mp4)
+  - Download and open in your favorite browser or video player
 
 ## Features
 
@@ -111,6 +113,7 @@ For detailed information, see:
 - **[RUN.md](docs/RUN.md)** - Configuration, running, and environment variables
 - **[DEPLOY.md](docs/DEPLOY.md)** - Secure deployment to Fly.io with scale-to-zero configuration
 - **[CI.md](docs/CI.md)** - GitHub Actions, testing, and security scanning
+- **[HISTORICAL.md](docs/HISTORICAL.md)** - Migration notes (Spring Boot 4.x, Spring AI 2.x upgrades)
 
 ## License
 

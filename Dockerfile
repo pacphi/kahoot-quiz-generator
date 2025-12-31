@@ -1,6 +1,9 @@
 # Build stage
 FROM bellsoft/liberica-openjdk-alpine:25 AS builder
 
+# Install C++ runtime libraries required by Node.js on Alpine/musl
+RUN apk add --no-cache libstdc++ libgcc
+
 WORKDIR /app
 
 # Copy Maven wrapper and pom.xml
@@ -13,8 +16,8 @@ RUN ./mvnw dependency:go-offline
 # Copy source code
 COPY src ./src
 
-# Build the application
-RUN ./mvnw clean package -DskipTests
+# Build the application (use fly profile to skip git-commit-id plugin)
+RUN ./mvnw clean package -DskipTests -Pfly
 
 # Extract Spring Boot layers for better caching
 RUN mkdir -p target/dependency && \

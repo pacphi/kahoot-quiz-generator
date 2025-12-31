@@ -6,14 +6,14 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>4.0.0</version>
+		<version>4.0.1</version>
 		<relativePath/>
 		<!-- lookup parent from repository -->
 	</parent>
 
 	<groupId>me.pacphi</groupId>
 	<artifactId>kahoot-quiz-generator</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0.0-SNAPSHOT</version>
 
 	<name>Kahoot Quiz Generator</name>
 	<description>I create a quiz file for you to upload to Kahoot based on your prompt</description>
@@ -47,16 +47,18 @@
 	</issueManagement>
 
 	<properties>
-		<java.version>21</java.version>
+		<java.version>25</java.version>
+		<!-- Skip git-commit-id plugin when .git is unavailable (e.g., Docker builds) -->
+		<skip.git.info>false</skip.git.info>
 		<assertj.version>3.27.6</assertj.version>
 		<cfenv.version>3.5.0</cfenv.version>
 		<jackson-databind-nullable.version>0.2.8</jackson-databind-nullable.version>
 		<jakarta-validation.version>3.1.1</jakarta-validation.version>
 		<json-io.version>4.70.0</json-io.version>
-		<node.version>v23.4.0</node.version>
-		<npm.version>10.9.2</npm.version>
+		<node.version>v24.12.0</node.version>
+		<npm.version>11.7.0</npm.version>
 		<poi.version>5.5.1</poi.version>
-		<spring-ai.version>1.1.0</spring-ai.version>
+		<spring-ai.version>2.0.0-M1</spring-ai.version>
 		<spring-doc.version>3.0.0</spring-doc.version>
 		<spring-boot-hc5.version>1.2.1</spring-boot-hc5.version>
 		<spring-cloud-bindings.version>2.0.4</spring-cloud-bindings.version>
@@ -104,8 +106,9 @@
 
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-web</artifactId>
+			<artifactId>spring-boot-starter-webmvc</artifactId>
 		</dependency>
+
 		<dependency>
 			<groupId>org.springframework.ai</groupId>
 			<artifactId>spring-ai-starter-model-openai</artifactId>
@@ -201,8 +204,8 @@
 			</dependency>
 			<dependency>
 				<groupId>org.springframework.cloud</groupId>
-				<artifactId>spring-cloud-starter-parent</artifactId>
-				<version>2025.0.0</version>
+				<artifactId>spring-cloud-dependencies</artifactId>
+				<version>2025.1.0</version>
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>
@@ -216,7 +219,7 @@
 			<dependency>
 				<groupId>io.micrometer</groupId>
 				<artifactId>micrometer-bom</artifactId>
-				<version>1.16.0</version>
+				<version>1.16.1</version>
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>
@@ -242,6 +245,8 @@
 					</execution>
 				</executions>
 				<configuration>
+					<!-- Skip when .git directory is not available (e.g., Docker builds) -->
+					<skip>${skip.git.info}</skip>
 					<!-- this is false by default, forces the plugin to generate the git.properties file -->
 					<generateGitPropertiesFile>true</generateGitPropertiesFile>
 					<!-- The path for the properties file to be generated. See Super Pom for default variable reference https://maven.apache.org/guides/introduction/introduction-to-the-pom.html -->
@@ -269,7 +274,7 @@
 			<plugin>
 				<groupId>org.openapitools</groupId>
 				<artifactId>openapi-generator-maven-plugin</artifactId>
-				<version>7.17.0</version>
+				<version>7.18.0</version>
 				<executions>
 					<execution>
 						<goals>
@@ -298,7 +303,7 @@
 			<plugin>
 				<groupId>com.github.eirslett</groupId>
 				<artifactId>frontend-maven-plugin</artifactId>
-				<version>1.15.4</version>
+				<version>2.0.0</version>
 				<configuration>
 					<workingDirectory>src/main/frontend</workingDirectory>
 					<nodeVersion>${node.version}</nodeVersion>
@@ -367,5 +372,26 @@
 			</plugin>
 		</plugins>
 	</build>
+
+	<profiles>
+		<!-- Profile for fly.io deployments where .git directory is not available -->
+		<profile>
+			<id>fly</id>
+			<properties>
+				<skip.git.info>true</skip.git.info>
+			</properties>
+		</profile>
+	</profiles>
+
+	<repositories>
+		<repository>
+			<id>spring-milestones</id>
+			<name>Spring Milestones</name>
+			<url>https://repo.spring.io/milestone</url>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+		</repository>
+	</repositories>
 
 </project>

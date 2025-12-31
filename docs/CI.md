@@ -16,7 +16,8 @@ The CI workflow is defined in `.github/workflows/ci.yml` and runs on:
 
 - **Trigger:** Push to any branch, Pull requests
 - **Runner:** Ubuntu latest
-- **Java Version:** 21
+- **Java Version:** 25
+- **Java Distribution:** Liberica
 - **Maven Version:** 3.9.9
 
 ### CI Pipeline Steps
@@ -59,6 +60,15 @@ The project uses [Snyk](https://snyk.io) for continuous security monitoring:
 - **Code Security:** Detects potential security issues in code
 - **Container Scanning:** Checks Docker images for vulnerabilities
 
+### SBOM (Software Bill of Materials)
+
+The project generates a CycloneDX SBOM during the build process:
+
+- **Format:** CycloneDX JSON
+- **Generation:** Automatic via `cyclonedx-maven-plugin`
+- **Access:** Available at `/actuator/sbom` endpoint when running
+- **Benefits:** Complete inventory of dependencies for security auditing
+
 #### Snyk Configuration
 
 - **Frequency:** Automatic scans on every push and weekly scheduled scans
@@ -100,16 +110,16 @@ After successful CI builds, the following artifacts are available:
 
 ## Release Process
 
-### Alpha Release
+### GA Release
 
-![Release Status](https://img.shields.io/badge/Release-Alpha-darkred)
+![Release Status](https://img.shields.io/badge/Release-GA-darkgreen)
 
-The project is currently in **Alpha** status, indicating:
+The project is currently in **GA (General Availability)** status, indicating:
 
-- Active development
-- API may change
-- Not recommended for production use
-- Testing and feedback welcome
+- Stable release
+- Production-ready
+- API is stable
+- Regular maintenance and updates
 
 ### Future Release Workflow
 
@@ -147,7 +157,7 @@ The CI workflow uses the following secrets and variables:
 
 ### Environment Variables
 
-- `JAVA_VERSION` - Java SDK version (21)
+- `JAVA_VERSION` - Java SDK version (25)
 - `MAVEN_OPTS` - Maven memory settings
 
 ## Troubleshooting CI Failures

@@ -39,6 +39,19 @@ spring:
       api-key: gsk_your-actual-api-key-here
 ```
 
+#### For Ollama (No API Key Required)
+
+Ollama runs locally and doesn't require an API key. Just ensure Ollama is running:
+
+```bash
+# Install Ollama (macOS)
+brew install ollama
+
+# Start Ollama and pull a model
+ollama serve &
+ollama pull mistral
+```
+
 > **Security Note:** Never commit `config/creds.yml` to version control. It should be in `.gitignore`.
 
 ## How to Run
@@ -69,6 +82,39 @@ The application will start with:
 - LLM provider: Groq Cloud
 - Model: llama-3.3-70b-versatile
 
+### Using Ollama (Local)
+
+```bash
+export CHAT_MODEL=mistral && \
+mvn spring-boot:run -Dspring-boot.run.arguments=--spring.profiles.active=ollama,dev
+```
+
+The application will start with:
+
+- Spring profile: `ollama` and `dev`
+- Server port: `8080`
+- LLM provider: Ollama (local)
+- Model: mistral (or your chosen model)
+
+### Using Docker
+
+```bash
+docker build -t kahoot-quiz-generator .
+docker run -p 8080:8080 \
+  -e SPRING_AI_OPENAI_API_KEY=your-api-key \
+  kahoot-quiz-generator
+```
+
+For Groq Cloud with Docker:
+
+```bash
+docker run -p 8080:8080 \
+  -e SPRING_PROFILES_ACTIVE=groq-cloud \
+  -e SPRING_AI_OPENAI_API_KEY=your-groq-key \
+  -e CHAT_MODEL=llama-3.3-70b-versatile \
+  kahoot-quiz-generator
+```
+
 ## Accessing the Application
 
 Once the application starts successfully, you'll see output like:
@@ -87,9 +133,21 @@ http://localhost:8080
 
 You should see the Kahoot Quiz Generator interface where you can:
 
-1. Enter a topic or theme
-2. Specify the number of questions
-3. Generate and download quiz Excel files
+1. Enter a topic or theme (AI Generation tab)
+2. Upload a CSV file (CSV Upload tab)
+3. Specify the number of questions or customize conversion options
+4. Generate and download quiz Excel files
+
+### Additional Endpoints
+
+| Endpoint | Description |
+|----------|-------------|
+| `http://localhost:8080/swagger-ui.html` | Interactive API documentation |
+| `http://localhost:8080/actuator/health` | Application health status |
+| `http://localhost:8080/actuator/info` | Build and git information |
+| `http://localhost:8080/actuator/metrics` | Available metrics |
+| `http://localhost:8080/actuator/prometheus` | Prometheus-compatible metrics |
+| `http://localhost:8080/actuator/sbom` | Software Bill of Materials |
 
 ## Shutdown
 
@@ -105,6 +163,8 @@ To stop the application:
 |---------|---------|----------------|
 | `openai` | Use OpenAI as LLM provider | `spring.ai.openai.api-key` |
 | `groq-cloud` | Use Groq Cloud as LLM provider | `spring.ai.groq.api-key` + `CHAT_MODEL` env var |
+| `ollama` | Use Ollama for local LLM | `CHAT_MODEL` env var + Ollama running locally |
+| `docker` | Docker Compose integration | None (auto-configures services) |
 | `dev` | Development mode with enhanced logging | None |
 
 ### Profile Configuration Location

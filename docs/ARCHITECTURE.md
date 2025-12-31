@@ -4,23 +4,35 @@
 
 ### Backend
 
-- **Java 21** - Modern Java LTS release
-- **Spring Boot 3.x** - Application framework
-- **Spring AI** - LLM integration with support for multiple providers
-- **Apache POI** - Excel (.xlsx) file generation
+- **Java 25** - Latest Java release with virtual threads support
+- **Spring Boot 4.x** - Application framework
+- **Spring AI 2.x** - LLM integration with support for multiple providers
+- **Apache POI 5.x** - Excel (.xlsx) file generation
+- **OpenCSV 5.x** - CSV file parsing and validation
 - **Maven 3.9.9** - Build and dependency management
 
 ### Frontend
 
-- **ReactJS** - UI framework
-- **Vite** - Build tool and development server
-- **Tailwind CSS** - Utility-first CSS framework
+- **ReactJS 18** - UI framework with hooks
+- **Vite 5** - Build tool and development server
+- **Tailwind CSS 3** - Utility-first CSS framework
+- **Radix UI** - Accessible component primitives
+- **Lucide React** - Icon library
 - **PostCSS** - CSS processing
 
 ### LLM Providers
 
-- **OpenAI** - Primary LLM provider
+- **OpenAI** - Primary LLM provider (GPT-4o-mini default)
 - **Groq Cloud** - Alternative LLM provider (llama-3.3-70b-versatile)
+- **Ollama** - Local LLM provider for self-hosted models
+
+### Observability
+
+- **Spring Boot Actuator** - Health, metrics, and info endpoints
+- **Micrometer** - Metrics facade
+- **Prometheus** - Metrics endpoint (`/actuator/prometheus`)
+- **OpenTelemetry** - Distributed tracing support
+- **CycloneDX** - SBOM generation (`/actuator/sbom`)
 
 ## Frontend Structure
 
@@ -34,14 +46,21 @@ src/main/frontend/
 ├── tailwind.config.js      # Tailwind CSS configuration
 ├── vite.config.js          # Vite build configuration
 └── src/
-    ├── App.jsx             # Main application component
+    ├── App.jsx             # Main application with tab navigation
     ├── index.css           # Global styles
     ├── main.jsx            # Application entry point
     └── components/
-        ├── QuizForm.jsx    # Quiz generation form
+        ├── AiGenerationTab.jsx    # AI quiz generation interface
+        ├── CsvUploadTab.jsx       # CSV file upload and preview
+        ├── QuizForm.jsx           # Quiz generation form
+        ├── CsvPreview.jsx         # CSV data preview with validation
+        ├── ConversionOptions.jsx  # Shuffle/time limit options
         └── ui/
-            ├── alert.jsx   # Alert component
-            └── card.jsx    # Card component
+            ├── alert.jsx          # Alert component
+            ├── button.jsx         # Button component
+            ├── card.jsx           # Card component
+            ├── input.jsx          # Input component
+            └── tabs.jsx           # Tab navigation (Radix UI)
 ```
 
 ## Backend Structure
@@ -50,30 +69,50 @@ The backend follows a clean Spring Boot architecture with service-oriented desig
 
 ```text
 src/main/java/me/pacphi/kahoot/
-├── controller/             # REST API endpoints
+├── KahootQuizGeneratorApplication.java  # Main application class
 ├── service/
-│   └── KahootService.java  # Core business logic for quiz generation
-├── model/
-│   └── KahootQuestion.java # Domain model for quiz questions
-└── config/                 # Spring configuration
+│   ├── KahootQuizGeneratorController.java  # REST API endpoints
+│   ├── KahootService.java      # AI quiz generation service
+│   ├── ExcelService.java       # Excel file generation
+│   ├── CsvParserService.java   # CSV parsing and validation
+│   └── KahootQuestion.java     # Domain model for quiz questions
+└── model/
+    ├── CsvConversionRequest.java   # CSV conversion request DTO
+    ├── CsvPreviewResponse.java     # CSV preview response with validation
+    └── ValidationError.java        # Validation error model
 ```
 
 ### Key Components
 
 #### KahootService
 
-The core service responsible for:
+The AI service responsible for:
 - Generating quiz questions using Spring AI's ChatClient
-- Interacting with LLM providers (OpenAI/Groq)
-- Creating Excel files conforming to Kahoot's template format
+- Interacting with LLM providers (OpenAI/Groq/Ollama)
 - Validating question structure (4 choices, 1 correct answer)
+
+#### ExcelService
+
+Excel generation service responsible for:
+- Creating Excel files conforming to Kahoot's template format
+- Shuffling questions and answer positions (optional)
+- Applying custom time limits per question
+
+#### CsvParserService
+
+CSV processing service responsible for:
+- Parsing CSV files with intelligent column detection
+- Supporting multiple column name aliases (case-insensitive)
+- Validating questions with detailed error reporting
+- Enforcing limits (max 100 questions, 5MB file size)
 
 #### KahootQuestion Record
 
 ```java
 public record KahootQuestion(
     String question,
-    List<Choice> choices) {
+    List<Choice> choices,
+    int timeLimit) {
 
     public record Choice(
         String answerText,
@@ -84,8 +123,9 @@ public record KahootQuestion(
 
 Validates:
 - Non-empty question text
-- Exactly 4 choices
+- Exactly 4 choices with non-empty text
 - Exactly one correct answer
+- Time limit between 5-240 seconds
 
 ## Spring Profiles
 
@@ -102,6 +142,7 @@ The application uses Spring profiles for flexible configuration:
 
 - Uses OpenAI as the LLM provider
 - Requires `spring.ai.openai.api-key` in `config/creds.yml`
+- Default model: `gpt-4o-mini`
 
 #### `groq-cloud`
 
@@ -109,10 +150,23 @@ The application uses Spring profiles for flexible configuration:
 - Requires `spring.ai.groq.api-key` in `config/creds.yml`
 - Requires `CHAT_MODEL` environment variable (e.g., `llama-3.3-70b-versatile`)
 
+#### `ollama`
+
+- Uses Ollama for local LLM inference
+- No API key required (self-hosted)
+- Requires Ollama running locally (default: `http://localhost:11434`)
+- Configure model via `CHAT_MODEL` environment variable
+
+#### `docker`
+
+- Docker Compose integration for local development
+- Auto-configures service connections
+
 #### `dev`
 
 - Development-specific configurations
 - Enhanced logging and debugging
+- Full actuator endpoint exposure
 
 ### Switching Profiles
 
@@ -120,6 +174,10 @@ The application uses Spring profiles for flexible configuration:
 # Use Groq Cloud instead of OpenAI
 export CHAT_MODEL=llama-3.3-70b-versatile && \
 mvn spring-boot:run -Dspring-boot.run.arguments=--spring.profiles.active=groq-cloud,dev
+
+# Use Ollama with local Mistral model
+export CHAT_MODEL=mistral && \
+mvn spring-boot:run -Dspring-boot.run.arguments=--spring.profiles.active=ollama,dev
 ```
 
 ## Build Integration
@@ -135,9 +193,24 @@ This allows a single `mvn package` command to build both frontend and backend.
 
 ## API Design
 
-The application exposes REST endpoints for:
-- Generating quiz questions from prompts
-- Downloading generated Excel files
-- Health checks and status
+### REST Endpoints
+
+| Endpoint | Method | Description |
+|----------|--------|-------------|
+| `/api/quiz/generate` | POST | Generate quiz using AI from topic |
+| `/api/quiz/upload` | POST | Upload and validate CSV file |
+| `/api/quiz/convert` | POST | Convert validated CSV to Excel |
+
+### Management Endpoints
+
+| Endpoint | Description |
+|----------|-------------|
+| `/actuator/health` | Application health status |
+| `/actuator/info` | Build and git information |
+| `/actuator/metrics` | Micrometer metrics |
+| `/actuator/prometheus` | Prometheus-compatible metrics |
+| `/actuator/sbom` | Software Bill of Materials (CycloneDX) |
+| `/swagger-ui.html` | Interactive API documentation |
+| `/v3/api-docs` | OpenAPI 3.0 specification |
 
 All responses conform to standard HTTP status codes and include appropriate error handling.

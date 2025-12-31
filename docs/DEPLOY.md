@@ -186,13 +186,14 @@ A production-ready `Dockerfile` is included in the project root ([`Dockerfile`](
 **Key features:**
 
 - **Multi-stage build** - Separates build and runtime stages for smaller final image
-- **BellSoft Liberica Alpine JDK** - Lightweight Alpine Linux-based Java distribution
+- **BellSoft Liberica Alpine JDK 25** - Lightweight Alpine Linux-based Java distribution with virtual threads support
   - Builder stage: `bellsoft/liberica-openjdk-alpine:25`
   - Runtime stage: `bellsoft/liberica-openjre-alpine:25` (JRE only for smaller size)
 - **Spring Boot layer extraction** - Optimizes Docker caching and rebuild times
 - **Security best practices** - Runs as non-root user (`appuser`)
 - **Health checks** - Monitors `/actuator/health` endpoint
 - **Minimal image size** - Alpine Linux base (~200MB vs ~400MB for Ubuntu-based images)
+- **Virtual threads** - Java 25 with virtual threads enabled for improved concurrency
 
 **Documentation:**
 

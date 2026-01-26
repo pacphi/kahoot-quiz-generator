@@ -50,7 +50,7 @@
 		<java.version>25</java.version>
 		<!-- Skip git-commit-id plugin when .git is unavailable (e.g., Docker builds) -->
 		<skip.git.info>false</skip.git.info>
-		<assertj.version>3.27.6</assertj.version>
+		<assertj.version>3.27.7</assertj.version>
 		<cfenv.version>3.5.0</cfenv.version>
 		<jackson-databind-nullable.version>0.2.8</jackson-databind-nullable.version>
 		<jakarta-validation.version>3.1.1</jakarta-validation.version>

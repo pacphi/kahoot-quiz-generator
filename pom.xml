@@ -280,6 +280,16 @@
 						<configuration>
 							<inputSpec>${project.basedir}/src/main/resources/openapi/kahoot-openapiv3-spec.yml</inputSpec>
 							<generatorName>spring</generatorName>
+							<!--
+								Restrict supporting-file generation to the minimum required for interfaceOnly mode.
+								The default supporting-file pass also writes a standalone pom.xml that pins an
+								older spring-boot-starter-parent, which Snyk discovers as a separate project and
+								flags as vulnerable even though it is a non-deployed build artifact. ApiUtil.java
+								is the only supporting file the generated interfaces reference at compile time.
+							-->
+							<globalProperties>
+								<supportingFiles>ApiUtil.java</supportingFiles>
+							</globalProperties>
 							<configOptions>
 								<interfaceOnly>true</interfaceOnly>
 								<useJakartaEe>true</useJakartaEe>

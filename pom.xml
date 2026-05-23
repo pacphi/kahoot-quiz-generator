@@ -6,7 +6,7 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>4.0.1</version>
+		<version>4.1.0-RC1</version>
 		<relativePath/>
 		<!-- lookup parent from repository -->
 	</parent>
@@ -58,7 +58,7 @@
 		<node.version>v24.12.0</node.version>
 		<npm.version>11.7.0</npm.version>
 		<poi.version>5.5.1</poi.version>
-		<spring-ai.version>2.0.0-M1</spring-ai.version>
+		<spring-ai.version>2.0.0-M7</spring-ai.version>
 		<spring-doc.version>3.0.1</spring-doc.version>
 		<spring-boot-hc5.version>2.0.0</spring-boot-hc5.version>
 		<spring-cloud-bindings.version>2.0.4</spring-cloud-bindings.version>
@@ -154,10 +154,6 @@
 			<version>${spring-cloud-bindings.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>org.springframework.ai</groupId>
-			<artifactId>spring-ai-spring-cloud-bindings</artifactId>
-		</dependency>
-		<dependency>
 			<groupId>io.github.springboot-addons</groupId>
 			<artifactId>spring-boot-starter-httpclient5-actuator</artifactId>
 			<version>${spring-boot-hc5.version}</version>
@@ -215,13 +211,6 @@
 				<version>4.4.0</version>
 				<scope>import</scope>
 				<type>pom</type>
-			</dependency>
-			<dependency>
-				<groupId>io.micrometer</groupId>
-				<artifactId>micrometer-bom</artifactId>
-				<version>1.16.1</version>
-				<type>pom</type>
-				<scope>import</scope>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
@@ -393,5 +382,16 @@
 			</snapshots>
 		</repository>
 	</repositories>
+
+	<pluginRepositories>
+		<pluginRepository>
+			<id>spring-milestones</id>
+			<name>Spring Milestones</name>
+			<url>https://repo.spring.io/milestone</url>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+		</pluginRepository>
+	</pluginRepositories>
 
 </project>

@@ -62,6 +62,10 @@
 		<spring-doc.version>3.0.3</spring-doc.version>
 		<spring-boot-hc5.version>2.0.1</spring-boot-hc5.version>
 		<spring-cloud-bindings.version>2.0.4</spring-cloud-bindings.version>
+		<!-- CVE remediation: upgrade netty to 4.2.13.Final (HTTP smuggling, data amplification, CRLF injection, resource leaks) -->
+		<netty.version>4.2.13.Final</netty.version>
+		<!-- CVE remediation: upgrade Tomcat to 11.0.22 (improper authentication, timing attack, authorization bypass) -->
+		<tomcat.version>11.0.22</tomcat.version>
 	</properties>
 
 	<dependencies>

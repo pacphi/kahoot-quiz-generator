@@ -6,7 +6,7 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>4.0.1</version>
+		<version>4.1.0-RC1</version>
 		<relativePath/>
 		<!-- lookup parent from repository -->
 	</parent>
@@ -50,17 +50,17 @@
 		<java.version>25</java.version>
 		<!-- Skip git-commit-id plugin when .git is unavailable (e.g., Docker builds) -->
 		<skip.git.info>false</skip.git.info>
-		<assertj.version>3.27.6</assertj.version>
+		<assertj.version>3.27.7</assertj.version>
 		<cfenv.version>3.5.0</cfenv.version>
-		<jackson-databind-nullable.version>0.2.8</jackson-databind-nullable.version>
+		<jackson-databind-nullable.version>0.2.10</jackson-databind-nullable.version>
 		<jakarta-validation.version>3.1.1</jakarta-validation.version>
-		<json-io.version>4.70.0</json-io.version>
+		<json-io.version>4.102.0</json-io.version>
 		<node.version>v24.12.0</node.version>
 		<npm.version>11.7.0</npm.version>
 		<poi.version>5.5.1</poi.version>
-		<spring-ai.version>2.0.0-M1</spring-ai.version>
-		<spring-doc.version>3.0.1</spring-doc.version>
-		<spring-boot-hc5.version>2.0.0</spring-boot-hc5.version>
+		<spring-ai.version>2.0.0-M7</spring-ai.version>
+		<spring-doc.version>3.0.3</spring-doc.version>
+		<spring-boot-hc5.version>2.0.1</spring-boot-hc5.version>
 		<spring-cloud-bindings.version>2.0.4</spring-cloud-bindings.version>
 	</properties>
 
@@ -113,6 +113,10 @@
 			<groupId>org.springframework.ai</groupId>
 			<artifactId>spring-ai-starter-model-openai</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>org.springframework.ai</groupId>
+			<artifactId>spring-ai-starter-model-ollama</artifactId>
+		</dependency>
 
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -152,10 +156,6 @@
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-bindings</artifactId>
 			<version>${spring-cloud-bindings.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.ai</groupId>
-			<artifactId>spring-ai-spring-cloud-bindings</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>io.github.springboot-addons</groupId>
@@ -205,7 +205,7 @@
 			<dependency>
 				<groupId>org.springframework.cloud</groupId>
 				<artifactId>spring-cloud-dependencies</artifactId>
-				<version>2025.1.0</version>
+				<version>2025.1.1</version>
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>
@@ -215,13 +215,6 @@
 				<version>4.4.0</version>
 				<scope>import</scope>
 				<type>pom</type>
-			</dependency>
-			<dependency>
-				<groupId>io.micrometer</groupId>
-				<artifactId>micrometer-bom</artifactId>
-				<version>1.16.1</version>
-				<type>pom</type>
-				<scope>import</scope>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
@@ -274,7 +267,7 @@
 			<plugin>
 				<groupId>org.openapitools</groupId>
 				<artifactId>openapi-generator-maven-plugin</artifactId>
-				<version>7.18.0</version>
+				<version>7.22.0</version>
 				<executions>
 					<execution>
 						<goals>
@@ -393,5 +386,16 @@
 			</snapshots>
 		</repository>
 	</repositories>
+
+	<pluginRepositories>
+		<pluginRepository>
+			<id>spring-milestones</id>
+			<name>Spring Milestones</name>
+			<url>https://repo.spring.io/milestone</url>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+		</pluginRepository>
+	</pluginRepositories>
 
 </project>

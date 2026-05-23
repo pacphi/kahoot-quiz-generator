@@ -9,7 +9,7 @@
 - **Spring AI 2.x** - LLM integration with support for multiple providers
 - **Apache POI 5.x** - Excel (.xlsx) file generation
 - **OpenCSV 5.x** - CSV file parsing and validation
-- **Maven 3.9.9** - Build and dependency management
+- **Maven 3.9.16** - Build and dependency management
 
 ### Frontend
 

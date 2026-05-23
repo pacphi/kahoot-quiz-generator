@@ -8,7 +8,7 @@ Before building the project, ensure you have the following installed:
 
 - **Git CLI** - For cloning the repository
 - **Java SDK 25** - [Download from Oracle](https://www.oracle.com/java/technologies/downloads/#java25) or use [SDKMAN](https://sdkman.io/)
-- **Maven 3.9.9** - [Download from Apache Maven](https://maven.apache.org/download.cgi)
+- **Maven 3.9.16** - [Download from Apache Maven](https://maven.apache.org/download.cgi)
 
 ### Optional
 
@@ -164,7 +164,7 @@ java -version
 # Should show Java 25
 
 mvn -version
-# Should show Maven 3.9.9 or later
+# Should show Maven 3.9.16 or later
 ```
 
 ## Dependencies Overview

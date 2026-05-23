@@ -45,7 +45,7 @@ This application:
 ### Prerequisites
 
 - Java SDK 25
-- Maven 3.9.9
+- Maven 3.9.16
 - OpenAI or Groq Cloud API key
 
 ### Clone

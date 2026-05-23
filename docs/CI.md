@@ -18,7 +18,7 @@ The CI workflow is defined in `.github/workflows/ci.yml` and runs on:
 - **Runner:** Ubuntu latest
 - **Java Version:** 25
 - **Java Distribution:** Liberica
-- **Maven Version:** 3.9.9
+- **Maven Version:** 3.9.16
 
 ### CI Pipeline Steps
 

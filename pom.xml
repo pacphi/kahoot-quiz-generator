@@ -59,7 +59,7 @@
 		<npm.version>11.7.0</npm.version>
 		<poi.version>5.5.1</poi.version>
 		<spring-ai.version>2.0.0-M7</spring-ai.version>
-		<spring-doc.version>3.0.3</spring-doc.version>
+		<spring-doc.version>3.1.0</spring-doc.version>
 		<spring-boot-hc5.version>2.0.1</spring-boot-hc5.version>
 		<spring-cloud-bindings.version>2.0.4</spring-cloud-bindings.version>
 		<!-- CVE remediation: upgrade netty to 4.2.13.Final (HTTP smuggling, data amplification, CRLF injection, resource leaks) -->
